@@ -11,6 +11,11 @@ ul li {
   list-style: none;
 }
 
+a {
+  display: block;
+  text-decoration: none;
+}
+
 img {
   display: block;
   border: none;
