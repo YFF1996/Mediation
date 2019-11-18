@@ -5,13 +5,13 @@
         <img src="../../common/img/logo.png" />
       </div>
       <ul>
-        <li>
+        <li class="active">
           <router-link to="">首页</router-link>
         </li>
         <li>
           <router-link to="">新闻公告</router-link>
         </li>
-        <li class="active">
+        <li>
           <router-link to="">法制知识</router-link>
         </li>
         <li>
@@ -64,7 +64,7 @@ export default {
           align-items: center
           a
             width: 100%
-            border-right: 1px solid #fff
+            border-left: 1px solid #fff
             text-align: center
             line-height: 16px
             font-size: 16px
@@ -75,7 +75,7 @@ export default {
           a
             border-right: none
             color: #D41A1D
-        li:last-child
+        li:first-child, .active + li
           a
-            border-right: none
+            border-left: none
 </style>

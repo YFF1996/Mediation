@@ -3,6 +3,7 @@
     <header-nav />
     <index-banner />
     <index-special />
+    <index-process />
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import HeaderNav from '@/components/headerNavTemplate'
 import IndexBanner from '@/components/indexBannerTemplate'
 import IndexSpecial from '@/components/indexSpecialTemplate'
+import IndexProcess from '@/components/indexProcessTemplate'
 
 export default {
   components: {
     HeaderNav,
     IndexBanner,
-    IndexSpecial
+    IndexSpecial,
+    IndexProcess
   }
 }
 </script>
