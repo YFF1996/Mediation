@@ -90,12 +90,12 @@
     .content
       width: 1180px
       height: auto
-      padding: 70px 0 50px 0
+      padding-bottom: 50px
       margin: 0 auto
       .title-wrapper
         width: 100%
         height: auto
-        padding-bottom: 55px
+        padding: 80px 0 55px 0
         .title
           width: 100%
           height: auto
