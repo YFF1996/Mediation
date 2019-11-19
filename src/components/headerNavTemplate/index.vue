@@ -1,25 +1,23 @@
 <template>
-  <div class="header-nav-wrapper">
+  <div class="header-nav-wrapper" :style="{ position: navState ? 'absolute' : 'relative' }">
     <div class="nav-content">
       <div class="logo">
-        <img src="../../common/img/logo.png" />
+        <img src="../../common/img/logo.png" v-if="navState" />
+        <img src="../../common/img/logo-active.png" v-else />
       </div>
-      <ul>
-        <li class="active">
-          <router-link to="">首页</router-link>
-        </li>
-        <li>
-          <router-link to="">新闻公告</router-link>
-        </li>
-        <li>
-          <router-link to="">法制知识</router-link>
-        </li>
-        <li>
-          <router-link to="">相关案例</router-link>
-        </li>
-        <li>
-          <router-link to="">在线调解</router-link>
-        </li>
+      <ul :class="{'ul-active' : navState}">
+        <router-link to="/">
+          <li>首页</li>
+        </router-link>
+        <router-link to="/news_announcement">
+          <li>新闻公告</li>
+        </router-link>
+        <router-link to="/related_cases">
+          <li>相关案例</li>
+        </router-link>
+        <router-link to="/online_mediation">
+          <li>在线调解</li>
+        </router-link>
       </ul>
       <div class="register-box"></div>
     </div>
@@ -28,12 +26,22 @@
 
 <script>
 export default {
+  data () {
+    return {
+    }
+  },
+  props: {
+    navState: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
   .header-nav-wrapper
-    position: absolute
+    position: relative
     top: 0
     left: 0
     width: 100%
@@ -57,25 +65,40 @@ export default {
         flex: 1
         padding: 0 50px
         display: flex
-        li
+        a
           width: 105px
           height: 38px
           display: flex
           align-items: center
-          a
+          li
             width: 100%
-            border-left: 1px solid #fff
+            height: auto
             text-align: center
             line-height: 16px
             font-size: 16px
-            color: #fff
-        .active
+            border-left: 1px solid #e5dede
+            color: #666
+        .router-link-exact-active
           border-radius: 4px
           background-color: #fff
-          a
+          li
             border-right: none
             color: #D41A1D
-        li:first-child, .active + li
-          a
+        a:first-child
+          li
+            border-left: none
+      ul.ul-active
+        a
+          li
+            border-left: 1px solid #fff
+            color: #fff
+        .router-link-exact-active
+          border-radius: 4px
+          background-color: #fff
+          li
+            border-right: none
+            color: #D41A1D
+        .router-link-exact-active + a
+          li
             border-left: none
 </style>

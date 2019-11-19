@@ -1,6 +1,6 @@
 <template>
   <div class="index-wrapper">
-    <header-nav />
+    <header-nav :navState="true" />
     <index-banner />
     <index-special />
     <index-process />
