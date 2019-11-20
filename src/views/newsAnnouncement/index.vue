@@ -13,13 +13,17 @@
           >{{ item.title }}</li>
         </ul>
       </div>
+      <news-list />
     </div>
+    <footer-tempate/>
   </div>
 </template>
 
 <script>
 import HeaderNav from '@/components/headerNavTemplate'
 import TitleBox from '@/components/titleBoxTemplate'
+import NewsList from '@/components/newsListTemplate'
+import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
@@ -48,7 +52,9 @@ export default {
   },
   components: {
     HeaderNav,
-    TitleBox
+    TitleBox,
+    NewsList,
+    FooterTempate
   }
 }
 </script>
@@ -60,6 +66,7 @@ export default {
     .content-wrapper
       width: 1180px
       height: auto
+      padding-bottom: 80px
       margin: 0 auto
       display: flex
       .left-nav-wrapper
