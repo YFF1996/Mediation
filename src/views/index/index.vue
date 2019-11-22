@@ -5,7 +5,7 @@
     <index-special />
     <index-process />
     <index-news />
-    <footer-tempate/>
+    <footer-tempate :footerState="true" />
   </div>
 </template>
 

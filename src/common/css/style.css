@@ -20,3 +20,8 @@ img {
   display: block;
   border: none;
 }
+
+input {
+  border: none;
+  outline: none;
+}
