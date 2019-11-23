@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-wrapper">
+  <div class="footer-wrapper" :class="{'footer-active' : footerState}">
     <div class="content">
       <p>浙公网安备33010602008175号</p>
       <p>浙ICP备09000381号</p>
@@ -10,6 +10,12 @@
 
 <script>
 export default {
+  props: {
+    footerState: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
@@ -17,7 +23,7 @@ export default {
   .footer-wrapper
     width: 100%
     height: auto
-    background-color: #282828
+    background-color: #fff
     .content
       width: 1180px
       height: auto
@@ -32,4 +38,6 @@ export default {
       .right
         float: right
         padding-right: 0
+  .footer-active
+    background-color: #282828
 </style>

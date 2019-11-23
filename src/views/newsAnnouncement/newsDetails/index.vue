@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <footer-tempate/>
+    <footer-tempate :footerState="true"  />
   </div>
 </template>
 
