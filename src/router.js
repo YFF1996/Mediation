@@ -4,6 +4,7 @@ import Index from '@/views/index'
 import NewsAnnouncement from '@/views/newsAnnouncement'
 import NewsDetails from '@/views/newsAnnouncement/newsDetails'
 import RelatedCases from '@/views/relatedCases'
+import RelatedCasesDetails from '@/views/relatedCases/relatedCasesDetails'
 import OnlineMediation from '@/views/onlineMediation'
 import Login from '@/views/login'
 import Registered from '@/views/registered'
@@ -31,6 +32,11 @@ export default new Router({
       path: '/related_cases',
       name: 'RelatedCases',
       component: RelatedCases
+    },
+    {
+      path: '/related_cases_details',
+      name: 'relatedCasesDetails',
+      component: RelatedCasesDetails
     },
     {
       path: '/online_mediation',

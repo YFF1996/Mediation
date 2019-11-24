@@ -93,9 +93,9 @@ export default {
             justify-content: space-between
             .update-item
               width: 360px
-              height: 180px
+              height: 190px
               padding-top: 45px
-              border: 1px solid #efdddd
+              border: 1px dashed #efdddd
               border-radius: 12px
               cursor: pointer
               box-sizing: border-box

@@ -1,7 +1,7 @@
 <template>
   <div class="title-box-wrapper">
     <div class="content">
-      <img :src="urlPic" />
+      <img v-if="urlPic" :src="urlPic" />
     </div>
   </div>
 </template>

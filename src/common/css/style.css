@@ -21,7 +21,7 @@ img {
   border: none;
 }
 
-input {
+input, textarea {
   border: none;
   outline: none;
 }

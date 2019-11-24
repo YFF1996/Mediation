@@ -62,10 +62,10 @@ export default {
   components: {
     HeaderNav,
     TitleBox,
-    FooterTempate,
     UserRegisteredA,
     UserRegisteredB,
-    UserRegisteredC
+    UserRegisteredC,
+    FooterTempate
   }
 }
 </script>
