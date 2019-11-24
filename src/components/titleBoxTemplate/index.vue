@@ -9,6 +9,7 @@
 <script>
 import newsImg from '@/common/img/news-title-bg.png'
 import xgalImg from '@/common/img/xgal-title-bg.png'
+import registeredImg from '@/common/img/register-title-bg.png'
 
 export default {
   data() {
@@ -27,6 +28,9 @@ export default {
           break;
         case 'related_cases':
           this.urlPic = xgalImg
+          break;
+        case 'registered':
+          this.urlPic = registeredImg
           break;
         default:
           return false

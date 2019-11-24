@@ -9,7 +9,7 @@
         </div>
         <div class="register-box">
           <p>还没有账号？</p>
-          <p class="active">马上登录</p>
+          <p class="active" @click="onSkipPage('/registered')">马上注册</p>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
         </li>
       </ul>
       <p>忘记密码？</p>
-      <div class="btn-box">登录</div>
+      <div class="btn-box" @click="onSkipPage('/')">登录</div>
     </div>
     <footer-tempate :footerState="false" />
   </div>
@@ -56,6 +56,11 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {}
+  },
+  methods: {
+    onSkipPage (path) {
+      this.$router.push(path)
+    }
   },
   components: {
     FooterTempate

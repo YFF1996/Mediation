@@ -6,6 +6,7 @@ import NewsDetails from '@/views/newsAnnouncement/newsDetails'
 import RelatedCases from '@/views/relatedCases'
 import OnlineMediation from '@/views/onlineMediation'
 import Login from '@/views/login'
+import Registered from '@/views/registered'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/registered',
+      name: 'Registered',
+      component: Registered
     }
   ]
 })
