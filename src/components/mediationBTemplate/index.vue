@@ -101,6 +101,7 @@
     },
     methods: {
       onNextFn () {
+        this.$emit('nextChild', 2)
       }
     }
   }

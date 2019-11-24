@@ -101,6 +101,7 @@ export default {
   },
   methods: {
     onNextFn () {
+      this.$emit('nextChild', 1)
     }
   }
 }

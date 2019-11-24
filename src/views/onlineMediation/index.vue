@@ -11,9 +11,9 @@
       >{{ item.title }}</div>
     </div>
     <div class="content-wrapper">
-      <mediation-a v-if="currentIndex === 0" @createNextChild="createNextFn" />
-      <mediation-b v-if="currentIndex === 1" @createNextChild="createNextFn" />
-      <mediation-c v-if="currentIndex === 2" @createNextChild="createNextFn" />
+      <mediation-a v-if="currentIndex === 0" @nextChild="onNextFn" />
+      <mediation-b v-if="currentIndex === 1" @nextChild="onNextFn" />
+      <mediation-c v-if="currentIndex === 2" @nextChild="onNextFn" />
     </div>
     <footer-tempate :footerState="true" />
   </div>
@@ -30,7 +30,7 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
-      currentIndex: 2,
+      currentIndex: 0,
       mediationLists: []
     }
   },
@@ -51,7 +51,8 @@ export default {
         }
       ]
     },
-    createNextFn () {
+    onNextFn (index) {
+      this.currentIndex = index
     }
   },
   components: {

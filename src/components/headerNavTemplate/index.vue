@@ -19,7 +19,12 @@
           <li>在线调解</li>
         </router-link>
       </ul>
-      <div class="register-box"></div>
+      <div class="register-box">
+        <div class="btn-box" :class="{'btn-box-active' : navState}">
+          <div class="btn" @click="onSkipPageFn('/login')">登录</div>
+          <div class="btn btn-active" @click="onSkipPageFn('/registered')">注册</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +33,11 @@
 export default {
   data () {
     return {
+    }
+  },
+  methods: {
+    onSkipPageFn (path) {
+      this.$router.push(path)
     }
   },
   props: {
@@ -101,4 +111,31 @@ export default {
         .router-link-exact-active + a
           li
             border-left: none
+      .register-box
+        width: auto
+        height: auto
+        .btn-box
+          width: auto
+          height: 100%
+          display: flex
+          align-items: center
+          .btn
+            padding: 0 20px
+            margin-right: 15px
+            line-height: 30px
+            border-radius: 2px
+            cursor: pointer
+            border: 1px solid #D41A1D
+            color: #D41A1D
+            box-sizing: border-box
+          .btn-active
+            color: #fff
+            background-color: #D41A1D
+        .btn-box-active
+          .btn
+            border-color: #fff
+            color: #fff
+          .btn-active
+            color: #D41A1D
+            background-color: #fff
 </style>
