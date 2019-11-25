@@ -1,19 +1,19 @@
 <template>
-  <div class="online-mediation-wrapper">
+  <div class="registered-wrapper">
     <header-nav :navState="false" />
-    <title-box />
+    <title-box :path="'registered'" />
     <div class="schedule-wrapper">
       <div
         class="item"
-        v-for="(item, index) in mediationLists"
+        v-for="(item, index) in scheduleLists"
         :class="{'item-active' : currentIndex >= index}"
         :key="index"
       >{{ item.title }}</div>
     </div>
     <div class="content-wrapper">
-      <mediation-a v-if="currentIndex === 0" @nextChild="onNextFn" />
-      <mediation-b v-if="currentIndex === 1" @nextChild="onNextFn" />
-      <mediation-c v-if="currentIndex === 2" @nextChild="onNextFn" />
+      <user-registered-a v-if="currentIndex === 0" @createNextChild="createNextFn" />
+      <user-registered-b v-if="currentIndex === 1" @createNextChild="createNextFn" />
+      <user-registered-c v-if="currentIndex === 2" @createNextChild="createNextFn" />
     </div>
     <footer-tempate :footerState="true" />
   </div>
@@ -22,16 +22,16 @@
 <script>
 import HeaderNav from '@/components/headerNavTemplate'
 import TitleBox from '@/components/titleBoxTemplate'
-import MediationA from '@/components/mediationATemplate'
-import MediationB from '@/components/mediationBTemplate'
-import MediationC from '@/components/mediationCTemplate'
+import UserRegisteredA from '@/components/userRegisteredATemplate'
+import UserRegisteredB from '@/components/userRegisteredBTemplate'
+import UserRegisteredC from '@/components/userRegisteredCTemplate'
 import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
     return {
       currentIndex: 0,
-      mediationLists: []
+      scheduleLists: []
     }
   },
   created () {
@@ -39,35 +39,39 @@ export default {
   },
   methods: {
     createScheduleFn () {
-      this.mediationLists = [
+      this.scheduleLists = [
         {
-          title: '1. 填写申请人信息'
+          title: '1. 创建账号'
         },
         {
-          title: '2. 填写被申请人信息'
+          title: '2. 实名认证'
         },
         {
-          title: '3. 填写纠纷详情'
+          title: '3. 注册完成'
         }
       ]
     },
-    onNextFn (index) {
-      this.currentIndex = index
+    createNextFn (index) {
+      if (index) {
+        this.currentIndex = index
+      } else {
+        this.$router.push('/login')
+      }
     }
   },
   components: {
     HeaderNav,
     TitleBox,
-    MediationA,
-    MediationB,
-    MediationC,
+    UserRegisteredA,
+    UserRegisteredB,
+    UserRegisteredC,
     FooterTempate
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-  .online-mediation-wrapper
+  .registered-wrapper
     width: 100%
     height: auto
     .schedule-wrapper
