@@ -1,7 +1,7 @@
 <template>
   <div class="header-nav-wrapper" :style="{ position: navState ? 'absolute' : 'relative' }">
     <div class="nav-content">
-      <div class="logo">
+      <div class="logo" @click="onSkipPageFn('/')">
         <img src="../../common/img/logo.png" v-if="navState" />
         <img src="../../common/img/logo-active.png" v-else />
       </div>
@@ -66,6 +66,7 @@ export default {
       .logo
         width: 310px
         height: auto
+        cursor: pointer
         display: flex
         align-items: center
         img

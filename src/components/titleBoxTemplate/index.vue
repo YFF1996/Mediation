@@ -10,6 +10,11 @@
 import newsImg from '@/common/img/news-title-bg.png'
 import xgalImg from '@/common/img/xgal-title-bg.png'
 import registeredImg from '@/common/img/register-title-bg.png'
+import myDisputeImg from '@/common/img/my-dispute-title-bg.png'
+import securitySettingsImg from '@/common/img/safety-set-title-bg.png'
+import myDataImg from '@/common/img/my-data-title-bg.png'
+import messageCenterImg from '@/common/img/message-center-title-bg.png'
+import myMediateImg from '@/common/img/my-mediate-title-bg.png'
 
 export default {
   data() {
@@ -31,6 +36,24 @@ export default {
           break;
         case 'registered':
           this.urlPic = registeredImg
+          break;
+        case 'my_dispute':
+          this.urlPic = myDisputeImg
+          break;
+        case 'security_settings':
+          this.urlPic = securitySettingsImg
+          break;
+        case 'my_data':
+          this.urlPic = myDataImg
+          break;
+        case 'message_center':
+          this.urlPic = messageCenterImg
+          break;
+        case 'my_mediate':
+          this.urlPic = myMediateImg
+          break;
+        case 'my_advisory':
+          this.urlPic = myMediateImg
           break;
         default:
           return false

@@ -1,0 +1,215 @@
+<template>
+  <div class="my-dispute-wrapper">
+    <header-nav :navState="false" />
+    <title-box :path="'my_dispute'" />
+    <div class="content-wrapper">
+      <my-nav />
+      <div class="content">
+        <div class="top-nav-wrapper">
+          <ul>
+            <li class="active">全部案例</li>
+            <li>待受理案例</li>
+            <li>已受理案例</li>
+          </ul>
+        </div>
+        <div class="time-wrapper">
+          <p>时间：</p>
+          <input class="select-time" type="text" placeholder="请选择时间">
+          <div class="btn">查询</div>
+        </div>
+        <div class="table-wrapper">
+          <div class="table-top">
+            <div class="item serial-number">排序</div>
+            <div class="item">纠纷概括</div>
+            <div class="item">申请时间</div>
+            <div class="item">办理阶段</div>
+            <div class="item">操作</div>
+          </div>
+          <ul>
+            <li>
+              <div class="item serial-number">1</div>
+              <div class="item">文字文字文字文字文字文字文字文字</div>
+              <div class="item">2019-12-12</div>
+              <div class="item">未受理</div>
+              <div class="item item-text">
+                <p>编辑</p>
+                <div class="line"></div>
+                <p>取消申请</p>
+              </div>
+            </li>
+            <li>
+              <div class="item serial-number">2</div>
+              <div class="item">文字文字文字文字文字文字文字文字</div>
+              <div class="item">2019-12-12</div>
+              <div class="item item-active">已受理</div>
+              <div class="item item-text">
+                <p>编辑</p>
+                <div class="line"></div>
+                <p>取消申请</p>
+              </div>
+            </li>
+            <li>
+              <div class="item serial-number">3</div>
+              <div class="item">文字文字文字文字文字文字文字文字</div>
+              <div class="item">2019-12-12</div>
+              <div class="item">未受理</div>
+              <div class="item item-text">
+                <p>编辑</p>
+                <div class="line"></div>
+                <p>咨询调解员</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <footer-tempate :footerState="true" />
+  </div>
+</template>
+
+<script>
+import HeaderNav from '@/components/headerNavTemplate'
+import TitleBox from '@/components/titleBoxTemplate'
+import MyNav from '@/components/myNavTemplate'
+import FooterTempate from '@/components/footerTemplate'
+
+export default {
+  data() {
+    return {}
+  },
+  components: {
+    HeaderNav,
+    TitleBox,
+    MyNav,
+    FooterTempate
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+  .my-dispute-wrapper
+    width: 100%
+    height: auto
+    background-color: #f2f2f2
+    .content-wrapper
+      width: 1180px
+      height: auto
+      margin: 0 auto
+      display: flex
+      background-color: #fff
+      .content
+        flex: 1
+        height: auto
+        padding: 0 45px
+        .top-nav-wrapper
+          width: 100%
+          height: auto
+          ul
+            width: 100%
+            height: 100px
+            display: flex
+            align-items: center
+            li
+              padding-right: 45px
+              line-height: 20px
+              font-size: 20px
+              cursor: pointer
+              color: #999
+            .active
+              color: #333
+              font-weight: bold
+        .time-wrapper
+          width: 100%
+          height: auto
+          display: flex
+          p
+            line-height: 38px
+            font-size: 16px
+            color: #333
+          input
+            width: 250px
+            height: 38px
+            padding: 0 10px
+            font-size: 14px
+            margin-right: 20px
+            border: 1px solid #ddd
+            border-radius: 4px
+            box-sizing: border-box
+          input::-webkit-input-placeholder
+                  font-size: 14px
+                  color: #999
+          .btn
+            width: auto
+            height: 38px
+            padding: 0 30px
+            line-height: 38px
+            font-size: 14px
+            border-radius: 4px
+            cursor: pointer
+            color: #fff
+            background-color: #d41a1d
+        .table-wrapper
+          width: 100%
+          height: auto
+          padding: 20px 0
+          .table-top
+            width: 100%
+            height: auto
+            display: flex
+            background-color: #f7f7f7
+            .item
+              flex: 1
+              font-size: 16px
+              text-align: center
+              line-height: 40px
+              border-right: 1px solid #f2f2f2
+              color: #666
+            .serial-number
+              flex: none
+              width: 55px
+              height: auto
+            .item:first-child
+              border-left: 1px solid #f2f2f2
+          ul
+            width: 100%
+            height: auto
+            li
+              width: 100%
+              height: auto
+              display: flex
+              .item
+                flex: 1
+                height: 60px
+                padding: 0 10px
+                font-size: 14px
+                text-align: center
+                line-height: 60px
+                border-right: 1px solid #f2f2f2
+                border-bottom: 1px solid #f2f2f2
+                display: -webkit-box
+                -webkit-box-orient: vertical
+                -webkit-line-clamp: 1
+                overflow: hidden
+                color: #666
+              .serial-number
+                flex: none
+                width: 55px
+                height: auto
+                padding: 0
+              .item-active
+                color: #0cdd56
+              .item-text
+                padding-left: 15px
+                display: flex
+                align-items: center
+                p
+                  cursor: pointer
+                  color: #2f82ff
+                .line
+                  width: 1px
+                  height: 16px
+                  margin: 0 15px
+                  background-color: #e6e6e6
+              .item:first-child
+                border-left: 1px solid #f2f2f2
+</style>

@@ -8,6 +8,13 @@ import RelatedCasesDetails from '@/views/relatedCases/relatedCasesDetails'
 import OnlineMediation from '@/views/onlineMediation'
 import Login from '@/views/login'
 import Registered from '@/views/registered'
+import RetrievePassword from '@/views/retrievePassword'
+import MyDispute from '@/views/myDispute'
+import SecuritySettings from '@/views/securitySettings'
+import MyData from '@/views/myData'
+import MessageCenter from '@/views/messageCenter'
+import MyMediate from '@/views/myMediate'
+import MyAdvisory from '@/views/myAdvisory'
 
 Vue.use(Router)
 
@@ -52,6 +59,41 @@ export default new Router({
       path: '/registered',
       name: 'Registered',
       component: Registered
+    },
+    {
+      path: '/retrieve_password',
+      name: 'RetrievePassword',
+      component: RetrievePassword
+    },
+    {
+      path: '/my_dispute',
+      name: 'myDispute',
+      component: MyDispute
+    },
+    {
+      path: '/security_settings',
+      name: 'securitySettings',
+      component: SecuritySettings
+    },
+    {
+      path: '/my_data',
+      name: 'myData',
+      component: MyData
+    },
+    {
+      path: '/message_center',
+      name: 'messageCenter',
+      component: MessageCenter
+    },
+    {
+      path: '/my_mediate',
+      name: 'myMediate',
+      component: MyMediate
+    },
+    {
+      path: '/my_advisory',
+      name: 'myAdvisory',
+      component: MyAdvisory
     }
   ]
 })

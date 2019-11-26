@@ -43,7 +43,7 @@
           <div class="code-img"></div>
         </li>
       </ul>
-      <p>忘记密码？</p>
+      <p @click="onSkipPage('/retrieve_password')">忘记密码？</p>
       <div class="btn-box" @click="onSkipPage('/')">登录</div>
     </div>
     <footer-tempate :footerState="false" />
