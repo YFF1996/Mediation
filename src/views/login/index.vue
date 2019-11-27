@@ -22,7 +22,7 @@
             <div class="icon">
               <img src="../../common/img/account-icon.png" />
             </div>
-            <input type="text" placeholder="请输入账号" />
+            <input type="text" v-model="accountVal" placeholder="请输入账号" />
           </div>
         </li>
         <li>
@@ -30,7 +30,7 @@
             <div class="icon">
               <img src="../../common/img/password-icon.png" />
             </div>
-            <input type="password" placeholder="密码" />
+            <input type="password" v-model="passwordVal" placeholder="密码" />
           </div>
         </li>
         <li>
@@ -38,26 +38,57 @@
             <div class="icon">
               <img src="../../common/img/code-icon.png" />
             </div>
-            <input type="text" placeholder="图形验证码" />
+            <input type="text" v-model="imgCodeVal" placeholder="图形验证码" />
           </div>
           <div class="code-img"></div>
         </li>
       </ul>
       <p @click="onSkipPage('/retrieve_password')">忘记密码？</p>
-      <div class="btn-box" @click="onSkipPage('/')">登录</div>
+      <div class="btn-box">
+        <el-button :plain="true" @click="onLoginFn()">登录</el-button>
+      </div>
     </div>
     <footer-tempate :footerState="false" />
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
-    return {}
+    return {
+      accountVal: '',
+      passwordVal: '',
+      imgCodeVal: ''
+    }
   },
   methods: {
+    ...mapMutations({
+      setLsLoginState: 'SET_LS_LOGIN_STATE'
+    }),
+    // 点击登录
+    onLoginFn () {
+      const accountVal = this.accountVal
+      const passwordVal = this.passwordVal
+      const imgCodeVal = this.imgCodeVal
+      if (!accountVal) {
+        this.$message.error('账号格式不对!')
+        return false
+      }
+      if (!passwordVal) {
+        this.$message.error('密码格式不对!')
+        return false
+      }
+      if (!imgCodeVal) {
+        this.$message.error('验证码不对!')
+        return false
+      }
+      this.setLsLoginState(true)
+      this.onSkipPage('/')
+    },
+    // 跳转页面
     onSkipPage (path) {
       this.$router.push(path)
     }
@@ -179,11 +210,11 @@ export default {
     .btn-box
       width: 100%
       height: auto
-      text-align: center
-      font-size: 24px
-      line-height: 60px
       border-radius: 4px
-      cursor: pointer
-      color: #fff
       background-color: #d41a1d
+      button
+        text-align: center
+        font-size: 24px
+        line-height: 60px
+        color: #fff
 </style>

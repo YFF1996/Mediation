@@ -21,7 +21,12 @@ img {
   border: none;
 }
 
-input, textarea {
-  border: none;
-  outline: none;
+input, textarea, button {
+  display: block !important;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  outline: none !important;
+  background-color: transparent !important;
 }

@@ -8,7 +8,12 @@
         v-for="(item, index) in scheduleLists"
         :class="{'item-active' : currentIndex >= index}"
         :key="index"
-      >{{ item.title }}</div>
+      >
+        {{ item.title }}
+        <div class="triangle-box">
+          <div class="triangle"></div>
+        </div>
+      </div>
     </div>
     <div class="content-wrapper">
       <user-registered-a v-if="currentIndex === 0" @createNextChild="createNextFn" />
@@ -82,18 +87,41 @@ export default {
       display: flex
       box-sizing: border-box
       .item
+        position: relative
         flex: 1
         line-height: 38px
         text-align: center
         font-size: 14px
-        border-right: 2px solid #fff
         color: #999
         background-color: #f3f3f3
         &.item:last-child
-          border: none
+          .triangle-box
+            display: none
+        .triangle-box
+          position: absolute
+          right: -25px
+          top: -1px
+          width: 0
+          height: 0
+          border-top: 20px solid transparent
+          border-bottom: 20px solid transparent
+          border-left: 23px solid #fff
+          z-index: 10
+          .triangle
+            position: absolute
+            top: -19px
+            left: -25px
+            width: 0
+            height: 0
+            border-top: 19px solid transparent
+            border-bottom: 19px solid transparent
+            border-left: 22px solid #f3f3f3
       .item-active
         color: #fff
         background-color: #d41a1d
+        .triangle-box
+          .triangle
+            border-left: 22px solid #d41a1d
     .content-wrapper
       width: 1180px
       height: auto

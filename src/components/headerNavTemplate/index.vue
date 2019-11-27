@@ -20,7 +20,28 @@
         </router-link>
       </ul>
       <div class="register-box">
-        <div class="btn-box" :class="{'btn-box-active' : navState}">
+        <div class="login-later-box" v-if="isLoginState">
+          <div class="message-icon">
+            <img v-if="navState" src="../../common/img/message-bs-icon.png" />
+            <img v-else src="../../common/img/message-icon.png" />
+          </div>
+          <p :style="{ color: navState ? '#fff' : '#000' }">欢迎您！YFF</p>
+          <div class="more-icon">
+            <img v-if="navState" src="../../common/img/pull-down-bs-icon.png" />
+            <img v-else src="../../common/img/pull-down-icon.png" />
+          </div>
+          <div class="my-wrapper">
+            <div class="my-item" @click="onSkipPageFn('/my_dispute')">
+              <img src="../../common/img/my-icon.png" />
+              <p>个人中心</p>
+            </div>
+            <div class="my-item" @click="onReturnLoginFn()">
+              <img src="../../common/img/return-login-icon.png" />
+              <p>退出登录</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-box" :class="{'btn-box-active' : navState}" v-else>
           <div class="btn" @click="onSkipPageFn('/login')">登录</div>
           <div class="btn btn-active" @click="onSkipPageFn('/registered')">注册</div>
         </div>
@@ -30,14 +51,27 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   data () {
     return {
     }
   },
+  computed: {
+    ...mapState([
+      'isLoginState'
+    ])
+  },
   methods: {
+    ...mapMutations({
+      setLsLoginState: 'SET_LS_LOGIN_STATE'
+    }),
     onSkipPageFn (path) {
       this.$router.push(path)
+    },
+    onReturnLoginFn () {
+      this.setLsLoginState(false)
     }
   },
   props: {
@@ -139,4 +173,62 @@ export default {
           .btn-active
             color: #D41A1D
             background-color: #fff
+        .login-later-box
+          position: relative
+          height: 100%
+          cursor: pointer
+          display: flex
+          align-items: center
+          .message-icon
+            width: 20px
+            height: 20px
+            img
+              width: 100%
+              height: 100%
+          p
+            padding: 0 10px
+            font-size: 14px
+            color: #000
+          .more-icon
+            width: 18px
+            height: 18px
+            img
+              width: 100%
+              height: 100%
+          .my-wrapper
+            display: none
+            position: absolute
+            left: 50%
+            top: 35px
+            width: 132px
+            height: auto
+            padding: 0 10px
+            margin-left: -66px
+            border-radius: 2px
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
+            background-color: #fff
+            box-sizing: border-box
+            .my-item
+              width: 100%
+              height: 42px
+              padding: 0 10px
+              border-bottom: 1px solid #D8D8D8
+              cursor: pointer
+              display: flex
+              align-items: center
+              box-sizing: border-box
+              img
+                width: 14px
+                height: 14px
+              p
+                font-size: 14px
+                color: #333333
+            .my-item:last-child
+              border-bottom: none
+            .my-item:hover
+              p
+                color: #D41A1D
+        .login-later-box:hover
+          .my-wrapper
+            display: block
 </style>
