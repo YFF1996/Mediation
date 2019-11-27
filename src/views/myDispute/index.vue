@@ -99,6 +99,7 @@ export default {
       background-color: #fff
       .content
         flex: 1
+        width: auto
         height: auto
         padding: 0 45px
         .top-nav-wrapper

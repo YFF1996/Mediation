@@ -65,5 +65,6 @@
           background-color: #fbe4e4
         .router-link-exact-active
           border-color: #d41a1d
+          color: #d41a1d
           background-color: #fbe4e4
 </style>
