@@ -99,7 +99,7 @@ export default {
     .content-wrapper
       width: 1180px
       height: auto
-      padding-bottom: 80px
+      padding-bottom: 20px
       margin: 0 auto
       display: flex
       .left-nav-wrapper

@@ -30,3 +30,43 @@ input, textarea, button {
   outline: none !important;
   background-color: transparent !important;
 }
+
+.pagination-wrapper {
+  width: 100%;
+  height: auto;
+  padding-top: 30px;
+}
+
+.pagination-wrapper .el-pagination {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+}
+
+.pagination-wrapper .el-pagination span, .pagination-wrapper .el-pagination button .el-icon {
+  font-size: 16px !important;
+}
+
+.pagination-wrapper .el-pagination button {
+  width: auto;
+}
+
+.el-pagination__sizes .el-input .el-input__inner {
+  font-size: 16px !important;
+}
+
+.el-select .el-input .el-select__caret {
+  font-size: 20px;
+  color: #303133;
+}
+
+.el-pagination__editor.el-input .el-input__inner {
+  border: 1px solid #e5e5e5 !important;
+}
+
+.pagination-wrapper .el-pagination button:hover, .el-pager li:hover, .el-pager li.active, .el-select-dropdown__item.selected {
+  color: #D41A1D !important;
+}

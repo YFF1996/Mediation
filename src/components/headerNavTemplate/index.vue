@@ -58,6 +58,10 @@ export default {
     return {
     }
   },
+  created () {
+    const state = window.localStorage.getItem('setLsLoginState')
+    this.setLsLoginState(state)
+  },
   computed: {
     ...mapState([
       'isLoginState'
@@ -71,6 +75,7 @@ export default {
       this.$router.push(path)
     },
     onReturnLoginFn () {
+      window.localStorage.removeItem('setLsLoginState')
       this.setLsLoginState(false)
     }
   },

@@ -16,17 +16,36 @@
         </div>
       </li>
     </ul>
+    <div class="pagination-wrapper">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 40, 50]"
+        :page-size="100"
+        layout="total, prev, pager, next, sizes, jumper"
+        :total="50">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {}
+    return {
+      currentPage: 1
+    }
   },
   methods: {
     onSkipNewsDetailsFn () {
       this.$router.push('/news_details')
+    },
+    handleSizeChange (val) {
+      window.console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      window.console.log(`当前页: ${val}`)
     }
   },
   props: ['lists']

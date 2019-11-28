@@ -11,14 +11,28 @@
       </div>
       <div class="news-wrapper">
         <div class="banner-wrapper">
-          <img src="../../common/img/news-bg1.jpg" />
+          <el-carousel
+            height="410px"
+            v-if="lists.length"
+            :initial-index="currendIndex"
+            @change="onChangeFn"
+          >
+            <el-carousel-item
+              v-for="(item, index) in lists"
+              :key="index"
+            >
+              <img :src="item.urlPic" />
+            </el-carousel-item>
+          </el-carousel>
           <div class="mask-box">
             <h3>亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会啊啊啊啊</h3>
-            <div class="dot-box">
+            <div class="dot-box" v-if="lists.length">
               <ul>
-                <li class="active"></li>
-                <li></li>
-                <li></li>
+                <li
+                  v-for="(item, index) in lists"
+                  :key="index"
+                  :class="{'active' : currendIndex === index}"
+                ></li>
               </ul>
             </div>
           </div>
@@ -65,7 +79,32 @@
 </template>
 
 <script>
+import imgUrl1 from '@/common/img/news-bg1.jpg'
+import imgUrl2 from '@/common/img/news-bg2.jpeg'
+import imgUrl3 from '@/common/img/news-bg3.jpg'
+
 export default {
+  data () {
+    return {
+      currendIndex: 0,
+      lists: [
+        {
+          urlPic: imgUrl1
+        },
+        {
+          urlPic: imgUrl2
+        },
+        {
+          urlPic: imgUrl3
+        }
+      ]
+    }
+  },
+  methods: {
+    onChangeFn (index) {
+      this.currendIndex = index
+    }
+  }
 }
 </script>
 
@@ -107,9 +146,10 @@ export default {
         .banner-wrapper
           position: relative
           width: 650px
-          height: 410px
+          height: auto
           border-radius: 10px
           overflow: hidden
+          background-color: #ccc
           img
             width: 100%
             height: 100%
@@ -122,6 +162,7 @@ export default {
             height: 60px
             padding: 0 15px 0 25px
             display: flex
+            z-index: 999
             background-color: rgba(0, 0, 0, 0.6)
             box-sizing: border-box
             h3
@@ -147,7 +188,6 @@ export default {
                   height: 14px
                   margin-left: 12px
                   border-radius: 50%
-                  cursor: pointer
                   background-color: #fff
                 .active
                   background-color: #D41A1D
@@ -163,6 +203,7 @@ export default {
               height: auto
               border-bottom: 1px solid #efefef
               line-height: 50px
+              cursor: pointer
               display: flex
               box-sizing: border-box
               h3
@@ -178,4 +219,7 @@ export default {
               p
                 font-size: 12px
                 color: #AAAAAA
+            li:hover
+              h3
+                color:#D41A1D
 </style>

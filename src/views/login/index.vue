@@ -85,6 +85,7 @@ export default {
         this.$message.error('验证码不对!')
         return false
       }
+      window.localStorage.setItem('setLsLoginState', true)
       this.setLsLoginState(true)
       this.onSkipPage('/')
     },

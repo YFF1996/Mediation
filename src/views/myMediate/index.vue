@@ -58,22 +58,22 @@
 </template>
 
 <script>
-  import HeaderNav from '@/components/headerNavTemplate'
-  import TitleBox from '@/components/titleBoxTemplate'
-  import MyNav from '@/components/myNavTemplate'
-  import FooterTempate from '@/components/footerTemplate'
+import HeaderNav from '@/components/headerNavTemplate'
+import TitleBox from '@/components/titleBoxTemplate'
+import MyNav from '@/components/myNavTemplate'
+import FooterTempate from '@/components/footerTemplate'
 
-  export default {
-    data() {
-      return {}
-    },
-    components: {
-      HeaderNav,
-      TitleBox,
-      MyNav,
-      FooterTempate
-    }
+export default {
+  data() {
+    return {}
+  },
+  components: {
+    HeaderNav,
+    TitleBox,
+    MyNav,
+    FooterTempate
   }
+}
 </script>
 
 <style lang="stylus" scoped>
