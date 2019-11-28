@@ -6,10 +6,16 @@
       <my-nav />
       <div class="content">
         <div class="top-nav-wrapper">
-          <ul>
-            <li class="active">全部案例</li>
-            <li>待受理案例</li>
-            <li>已受理案例</li>
+          <ul v-if="navList.length">
+            <li
+              v-for="(item, index) in navList"
+              :class="{'active' : currentIndex === index}"
+              @click="onItemFn(index)"
+              :key="index"
+            >
+              {{ item.title }}
+              <div class="line"></div>
+            </li>
           </ul>
         </div>
         <div class="time-wrapper">
@@ -32,7 +38,7 @@
               <div class="item">2019-12-12</div>
               <div class="item">未受理</div>
               <div class="item item-text">
-                <p>编辑</p>
+                <p class="active">编辑</p>
                 <div class="line"></div>
                 <p>取消申请</p>
               </div>
@@ -43,7 +49,7 @@
               <div class="item">2019-12-12</div>
               <div class="item item-active">已受理</div>
               <div class="item item-text">
-                <p>编辑</p>
+                <p class="active">编辑</p>
                 <div class="line"></div>
                 <p>取消申请</p>
               </div>
@@ -54,12 +60,23 @@
               <div class="item">2019-12-12</div>
               <div class="item">未受理</div>
               <div class="item item-text">
-                <p>编辑</p>
+                <p class="active">编辑</p>
                 <div class="line"></div>
                 <p>咨询调解员</p>
               </div>
             </li>
           </ul>
+        </div>
+        <div class="pagination-wrapper">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40, 50]"
+            :page-size="100"
+            layout="total, prev, pager, next, sizes, jumper"
+            :total="50">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -75,7 +92,32 @@ import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
-    return {}
+    return {
+      currentIndex: 0,
+      navList: [
+        {
+          title: '全部案例'
+        },
+        {
+          title: '待受理案例'
+        },
+        {
+          title: '已受理案例'
+        }
+      ],
+      currentPage: 1
+    }
+  },
+  methods: {
+    onItemFn (index) {
+      this.currentIndex = index
+    },
+    handleSizeChange (val) {
+      window.console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      window.console.log(`当前页: ${val}`)
+    }
   },
   components: {
     HeaderNav,
@@ -111,14 +153,25 @@ export default {
             display: flex
             align-items: center
             li
+              position: relative
               padding-right: 45px
               line-height: 20px
               font-size: 20px
               cursor: pointer
               color: #999
+              .line
+                position: absolute
+                left: 50%
+                bottom: -15px
+                margin-left: -45px
+                width: 50px
+                height: 5px
+                background-color: #fff
             .active
-              color: #333
               font-weight: bold
+              color: #333
+              .line
+                background-color: #d41a1d
         .time-wrapper
           width: 100%
           height: auto
@@ -200,12 +253,13 @@ export default {
               .item-active
                 color: #0cdd56
               .item-text
-                padding-left: 15px
                 display: flex
                 align-items: center
                 p
                   cursor: pointer
                   color: #2f82ff
+                .active
+                  padding-left: 15px
                 .line
                   width: 1px
                   height: 16px
@@ -213,4 +267,7 @@ export default {
                   background-color: #e6e6e6
               .item:first-child
                 border-left: 1px solid #f2f2f2
+        .pagination-wrapper
+          width: 100%
+          height: auto
 </style>

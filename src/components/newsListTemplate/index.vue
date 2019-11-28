@@ -112,4 +112,7 @@ export default {
       li:hover
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1)
         background-color: #fff
+    .pagination-wrapper
+      width: 100%
+      height: auto
 </style>

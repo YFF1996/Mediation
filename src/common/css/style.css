@@ -24,11 +24,15 @@ img {
 input, textarea, button {
   display: block !important;
   width: 100%;
+  border: none;
+  outline: none !important;
+  background-color: transparent !important;
+}
+
+button {
   padding: 0 !important;
   margin: 0 !important;
   border: none !important;
-  outline: none !important;
-  background-color: transparent !important;
 }
 
 .pagination-wrapper {
@@ -52,10 +56,6 @@ input, textarea, button {
 
 .pagination-wrapper .el-pagination button {
   width: auto;
-}
-
-.el-pagination__sizes .el-input .el-input__inner {
-  font-size: 16px !important;
 }
 
 .el-select .el-input .el-select__caret {

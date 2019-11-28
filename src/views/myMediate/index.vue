@@ -51,6 +51,17 @@
             </div>
           </li>
         </ul>
+        <div class="pagination-wrapper">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40, 50]"
+            :page-size="100"
+            layout="total, prev, pager, next, sizes, jumper"
+            :total="50">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <footer-tempate :footerState="true" />
@@ -65,7 +76,17 @@ import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
-    return {}
+    return {
+      currentPage: 1
+    }
+  },
+  methods: {
+    handleSizeChange (val) {
+      window.console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      window.console.log(`当前页: ${val}`)
+    }
   },
   components: {
     HeaderNav,
@@ -167,4 +188,7 @@ export default {
                     font-size: 16px
                     line-height: 42px
                     color: #fff
+        .pagination-wrapper
+          width: 100%
+          height: auto
 </style>

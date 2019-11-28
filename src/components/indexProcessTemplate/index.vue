@@ -54,7 +54,7 @@
         </ul>
       </div>
       <div class="btn-box">
-        <a href="#">立即申请</a>
+        <router-link to="/my_mediate">立即申请</router-link>
       </div>
     </div>
   </div>
