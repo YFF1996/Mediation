@@ -49,7 +49,7 @@
               <div class="item">2019-12-12</div>
               <div class="item item-active">已受理</div>
               <div class="item item-text">
-                <p class="active">编辑</p>
+                <p class="active">查看</p>
                 <div class="line"></div>
                 <p>取消申请</p>
               </div>
