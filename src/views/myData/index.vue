@@ -9,7 +9,17 @@
           <div class="top-box">
             <h3>修改头像</h3>
             <div class="avatar">
-              <img class="edit-icon" src="../../common/img/edit-avatar-icon.png" />
+              <img v-if="imageUrl" :src="imageUrl" class="avatar-img">
+              <div class="edit-icon">
+                <el-upload
+                  class="avatar-uploader"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                >
+                </el-upload>
+                <img src="../../common/img/edit-avatar-icon.png" />
+              </div>
             </div>
           </div>
           <p>仅支持JPEG、PNG图片格式、且文件小于5M</p>
@@ -61,21 +71,56 @@
               <h3>现居地址</h3>
             </div>
             <div class="input-box">
-              <select>
-                <option>请选择</option>
-              </select>
-              <select>
-                <option>请选择</option>
-              </select>
-              <select>
-                <option>请选择</option>
-              </select>
-              <select>
-                <option>请选择</option>
-              </select>
-              <select>
-                <option>请选择</option>
-              </select>
+              <div class="select-box">
+                <el-select v-model="areaVal" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in areas"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="select-box">
+                <el-select v-model="areaVal" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in areas"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="select-box">
+                <el-select v-model="areaVal" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in areas"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="select-box">
+                <el-select v-model="areaVal" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in areas"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="select-box">
+                <el-select v-model="areaVal" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in areas"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
             </div>
           </li>
           <li>
@@ -102,9 +147,16 @@
               <h3>其他证件</h3>
             </div>
             <div class="input-box">
-              <select>
-                <option>身份证</option>
-              </select>
+              <div class="select-box">
+                <el-select v-model="value" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
               <input class="input-240" type="text" placeholder="请输入你的证件号">
             </div>
           </li>
@@ -128,7 +180,23 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
-      sexTypeRadio: 0
+      imageUrl: '',
+      sexTypeRadio: 0,
+      areas: [{
+        value: '北京市',
+        label: '北京市'
+      }],
+      areaVal: '',
+      options: [{
+        value: '身份证',
+        label: '身份证'
+      }],
+      value: ''
+    }
+  },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
     }
   },
   components: {
@@ -178,13 +246,20 @@ export default {
               height: 120px
               border-radius: 50%
               background-color: #f4f4f4
+              .avatar-img
+                width: 100%
+                height: 100%
+                border-radius: 50%
+                object-fit: cover
               .edit-icon
                 position: absolute
                 right: 0
                 bottom: 0
                 width: 37px
                 height: 37px
-                cursor: pointer
+                img
+                  width: 100%
+                  height: 100%
           p
             padding: 0 0 10px 110px
             line-height: 55px
@@ -236,7 +311,7 @@ export default {
               input::-webkit-input-placeholder
                       font-size: 14px
                       color: #aaa
-              select
+              .select-box
                 flex: none
                 width: 140px
                 margin-right: 20px

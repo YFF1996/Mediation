@@ -7,9 +7,14 @@
           <h3>证件号码</h3>
         </div>
         <div class="input-box">
-          <select>
-            <option>身份证</option>
-          </select>
+          <el-select v-model="value" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </div>
       </li>
       <li>
@@ -25,7 +30,8 @@
         <div class="name"></div>
         <div class="input-box">
           <input type="number" placeholder="请输入6位验证码" />
-          <div class="get-code-btn">免费获取验证码</div>
+          <div class="get-code-btn" @click="onGetCodeFn()" v-if="second === 60">{{ codeText }}</div>
+          <div class="get-code-btn" v-else>{{ second }}s</div>
         </div>
       </li>
     </ul>
@@ -37,13 +43,33 @@
 </template>
 
 <script>
+let stop = null
+
 export default {
   data() {
-    return {}
+    return {
+      options: [{
+        value: '身份证',
+        label: '身份证'
+      }],
+      value: '',
+      second: 60,
+      codeText: '免费获取验证码'
+    }
   },
   methods: {
     onNextFn () {
       this.$emit('nextChild', 1)
+    },
+    onGetCodeFn () {
+      stop = setInterval(() => {
+        this.second --
+        if (this.second <= 0) {
+          this.second = 60
+          this.codeText = '重新获取验证码'
+          window.clearInterval(stop)
+        }
+      }, 1000)
     }
   }
 }

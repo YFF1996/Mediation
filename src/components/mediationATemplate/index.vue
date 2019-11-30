@@ -29,9 +29,16 @@
           <h3>证件</h3>
         </div>
         <div class="input-box">
-          <select>
-            <option>身份证</option>
-          </select>
+          <div class="select-box">
+            <el-select v-model="value" clearable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
           <input type="text" placeholder="请输入你的证件号">
         </div>
       </li>
@@ -97,7 +104,12 @@ export default {
   data() {
     return {
       nameTypeRadio: 0,
-      sexTypeRadio: 0
+      sexTypeRadio: 0,
+      options: [{
+        value: '身份证',
+        label: '身份证'
+      }],
+      value: ''
     }
   },
   methods: {
@@ -145,7 +157,7 @@ export default {
           flex: 1
           height: 38px
           display: flex
-          input, select
+          input
             flex: 1
             height: 100%
             padding: 0 20px
@@ -157,7 +169,7 @@ export default {
           input::-webkit-input-placeholder
                   font-size: 14px
                   color: #aaa
-          select
+          .select-box
             flex: none
             width: 140px
             margin-right: 20px

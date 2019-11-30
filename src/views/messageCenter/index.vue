@@ -19,9 +19,16 @@
           </ul>
         </div>
         <div class="time-wrapper">
-          <select>
-            <option>未读消息</option>
-          </select>
+          <div class="select-box">
+            <el-select v-model="value" clearable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
           <div class="search-box">
             <input type="text">
             <div class="search-btn">搜索</div>
@@ -93,7 +100,18 @@ export default {
           title: '消息通知'
         }
       ],
-      currentPage: 1
+      currentPage: 1,
+      options: [
+        {
+          value: '未读消息',
+          label: '未读消息'
+        },
+        {
+          value: '已读消息',
+          label: '已读消息'
+        }
+      ],
+      value: ''
     }
   },
   methods: {
@@ -164,14 +182,10 @@ export default {
           width: 100%
           height: auto
           display: flex
-          select
+          .select-box
             width: 125px
             height: 38px
-            font-size: 14px
             margin-right: 20px
-            border: 1px solid #ddd
-            border-radius: 4px
-            box-sizing: border-box
           .search-box
             width: auto
             height: auto

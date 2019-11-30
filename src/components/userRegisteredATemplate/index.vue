@@ -16,9 +16,6 @@
           <h3>选择证件类型</h3>
         </div>
         <div class="input-box">
-          <!--<select>-->
-            <!--<option>身份证</option>-->
-          <!--</select>-->
           <el-select v-model="value" clearable placeholder="请选择">
             <el-option
               v-for="item in options"
@@ -61,7 +58,8 @@
         <div class="name"></div>
         <div class="input-box">
           <input type="number" placeholder="请输入6位验证码" />
-          <div class="get-code-btn">免费获取验证码</div>
+          <div class="get-code-btn" @click="onGetCodeFn()" v-if="second === 60">{{ codeText }}</div>
+          <div class="get-code-btn" v-else>{{ second }}s</div>
         </div>
       </li>
       <li>
@@ -81,7 +79,7 @@
       </li>
     </ul>
     <div class="protocol-wrapper">
-      <div class="checkbox-box"></div>
+      <el-checkbox v-model="checked" />
       <div class="text">
         <p>我已阅读并同意</p>
         <p class="active">《河池调解平台注册协议》</p>
@@ -95,6 +93,8 @@
 </template>
 
 <script>
+let stop = null
+
 export default {
   data() {
     return {
@@ -102,12 +102,25 @@ export default {
         value: '身份证',
         label: '身份证'
       }],
-      value: ''
+      value: '',
+      checked: false,
+      second: 60,
+      codeText: '免费获取验证码'
     }
   },
   methods: {
     onNextFn () {
       this.$emit('createNextChild', 1)
+    },
+    onGetCodeFn () {
+      stop = setInterval(() => {
+        this.second --
+        if (this.second <= 0) {
+          this.second = 60
+          this.codeText = '重新获取验证码'
+          window.clearInterval(stop)
+        }
+      }, 1000)
     }
   }
 }
@@ -145,7 +158,7 @@ export default {
           flex: 1
           height: 38px
           display: flex
-          input, select
+          input
             flex: 1
             height: 100%
             padding: 0 20px
@@ -180,14 +193,8 @@ export default {
       height: auto
       padding: 35px 0 35px 105px
       display: flex
+      align-items: center
       box-sizing: border-box
-      .checkbox-box
-        width: 14px
-        height: 14px
-        border: 1px solid #e7e7e7
-        border-radius: 2px
-        cursor: pointer
-        box-sizing: border-box
       .text
         flex: 1
         padding-left: 10px

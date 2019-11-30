@@ -40,24 +40,14 @@
           <h3>相关资料</h3>
         </div>
         <div class="update-wrapper">
-          <div class="update-item">
-            <img src="../../common/img/mediation-update-icon.png" />
-            <div class="text">
-              <p>将文件拖到此处，或</p>
-              <p class="active">点击上传</p>
-            </div>
-          </div>
-          <div class="update-type">仅支持JPG、PNG、DEC、XLS、PDF、AVI、MP4等格式文件</div>
-          <div class="file-ul">
-            <div class="file-item">
-              <img src="../../common/img/doc-icon.png" />
-              <p>VPN销售清单收集.doc</p>
-            </div>
-            <div class="file-item">
-              <img src="../../common/img/doc-icon.png" />
-              <p>VPN销售清单收集.doc</p>
-            </div>
-          </div>
+          <el-upload
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple>
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">仅支持JPG、PNG、DEC、XLS、PDF、AVI、MP4等格式文件b</div>
+          </el-upload>
         </div>
       </li>
     </ul>
@@ -133,57 +123,6 @@ export default {
                   color: #aaa
         .update-wrapper
           width: 390px
-          height: auto
-        .update-item
-          width: 100%
-          height: 120px
-          padding-top: 20px
-          border: 1px dashed #e7e7e7
-          border-radius: 12px
-          cursor: pointer
-          box-sizing: border-box
-          img
-            width: 62px
-            height: 45px
-            margin: 0 auto
-        .update-type
-          line-height: 30px
-          font-size: 12px
-          color: #999
-        .file-ul
-          width: 100%
-          height: auto
-          .file-item
-            width: 100%
-            height: auto
-            padding: 5px
-            margin-top: 10px
-            border-radius: 2px
-            cursor: pointer
-            display: flex
-            box-sizing: border-box
-            img
-              width: 10px
-              height: 12px
-            p
-              flex: 1
-              padding-left: 10px
-              font-size: 12px
-              line-height: 12px
-              color: #999
-          .file-item:hover
-            background-color: #eef1f6
-            p
-              color: #4093ff
-        .text
-          display: flex
-          justify-content: center
-          p
-            font-size: 12px
-            line-height: 54px
-            color: #999
-          .active
-            color: #409eff
       li:last-child
         padding-bottom: 0
     .submit-wrapper
