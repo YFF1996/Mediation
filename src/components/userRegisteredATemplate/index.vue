@@ -16,9 +16,17 @@
           <h3>选择证件类型</h3>
         </div>
         <div class="input-box">
-          <select>
-            <option>身份证</option>
-          </select>
+          <!--<select>-->
+            <!--<option>身份证</option>-->
+          <!--</select>-->
+          <el-select v-model="value" clearable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </div>
       </li>
       <li>
@@ -89,7 +97,13 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      options: [{
+        value: '身份证',
+        label: '身份证'
+      }],
+      value: ''
+    }
   },
   methods: {
     onNextFn () {

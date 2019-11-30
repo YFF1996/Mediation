@@ -7,16 +7,13 @@
           <h3>纠纷类型</h3>
         </div>
         <div class="radio-box">
-          <div class="dot dot-active"></div>
-          <p>婚姻家庭</p>
-          <div class="dot"></div>
-          <p>道路纠纷</p>
-          <div class="dot"></div>
-          <p>物业纠纷</p>
-          <div class="dot"></div>
-          <p>劳动纠纷</p>
-          <div class="dot"></div>
-          <p>医疗纠纷</p>
+          <el-radio-group v-model="typeRadio">
+            <el-radio :label="0">婚姻家庭</el-radio>
+            <el-radio :label="1">道路纠纷</el-radio>
+            <el-radio :label="2">物业纠纷</el-radio>
+            <el-radio :label="3">劳动纠纷</el-radio>
+            <el-radio :label="4">医疗纠纷</el-radio>
+          </el-radio-group>
         </div>
       </li>
       <li>
@@ -72,15 +69,17 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {}
-    },
-    methods: {
-      onNextFn () {
-      }
+export default {
+  data() {
+    return {
+      typeRadio: 0
+    }
+  },
+  methods: {
+    onNextFn () {
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -116,20 +115,6 @@
           height: 100%
           display: flex
           align-items: center
-          .dot
-            width: 20px
-            height: 20px
-            border: 1px solid #e5e5e5
-            border-radius: 50%
-            cursor: pointer
-            box-sizing: border-box
-          .dot-active
-            border: 6px solid #d41a1d
-          p
-            padding: 0 30px 0 10px
-            font-size: 14px
-            line-height: 38px
-            color: #333
         .textarea-box
           flex: 1
           height: auto

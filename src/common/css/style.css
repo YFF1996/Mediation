@@ -70,3 +70,36 @@ button {
 .pagination-wrapper .el-pagination button:hover, .el-pager li:hover, .el-pager li.active, .el-select-dropdown__item.selected {
   color: #D41A1D !important;
 }
+
+.el-radio__inner {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.el-radio__inner::after {
+  width: 8px;
+  height: 8px;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #d41a1d !important;
+  background: #d41a1d !important;
+}
+
+.el-radio__inner:hover {
+  border-color: #d41a1d !important;
+}
+
+.el-radio, .el-radio__input.is-checked+.el-radio__label {
+  font-size: 14px !important;
+  line-height: 38px !important;
+  color: #333 !important;
+}
+
+.el-select {
+  width: 100%;
+}
+
+.el-select .el-input.is-focus .el-input__inner, .el-select .el-input__inner:focus {
+  border-color: #e7e7e7 !important;
+}

@@ -4,15 +4,14 @@
       <li>
         <div class="name">
           <p>*</p>
-          <h3>申请人姓名</h3>
+          <h3>申请人类型</h3>
         </div>
         <div class="radio-box">
-          <div class="dot dot-active"></div>
-          <p>自然人</p>
-          <div class="dot"></div>
-          <p>法人</p>
-          <div class="dot"></div>
-          <p>非法人组织</p>
+          <el-radio-group v-model="nameTypeRadio">
+            <el-radio :label="0">自然人</el-radio>
+            <el-radio :label="1">法人</el-radio>
+            <el-radio :label="2">非法人组织</el-radio>
+          </el-radio-group>
         </div>
       </li>
       <li>
@@ -42,12 +41,11 @@
           <h3>申请人性别</h3>
         </div>
         <div class="radio-box">
-          <div class="dot dot-active"></div>
-          <p>男</p>
-          <div class="dot"></div>
-          <p>女</p>
-          <div class="dot"></div>
-          <p>其他</p>
+          <el-radio-group v-model="sexTypeRadio">
+            <el-radio :label="0">男</el-radio>
+            <el-radio :label="1">女</el-radio>
+            <el-radio :label="2">其他</el-radio>
+          </el-radio-group>
         </div>
       </li>
       <li>
@@ -97,7 +95,10 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      nameTypeRadio: 0,
+      sexTypeRadio: 0
+    }
   },
   methods: {
     onNextFn () {
@@ -140,20 +141,6 @@ export default {
           height: 100%
           display: flex
           align-items: center
-          .dot
-            width: 20px
-            height: 20px
-            border: 1px solid #e5e5e5
-            border-radius: 50%
-            cursor: pointer
-            box-sizing: border-box
-          .dot-active
-            border: 6px solid #d41a1d
-          p
-            padding: 0 30px 0 10px
-            font-size: 14px
-            line-height: 38px
-            color: #333
         .input-box
           flex: 1
           height: 38px
