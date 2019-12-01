@@ -4,7 +4,7 @@
       <li
         v-for="(item, index) in lists"
         :key="index"
-        @click="onSkipNewsDetailsFn()"
+        @click="onSkipPageFn('/news_details')"
       >
         <div class="news-img">
           <img :src="item.urlPic" />
@@ -38,8 +38,8 @@ export default {
     }
   },
   methods: {
-    onSkipNewsDetailsFn () {
-      this.$router.push('/news_details')
+    onSkipPageFn (path) {
+      this.$router.push(path)
     },
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)

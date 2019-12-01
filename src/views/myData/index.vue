@@ -53,7 +53,13 @@
               <h3>出生年月</h3>
             </div>
             <div class="input-box">
-              <input class="input-240" type="text" />
+              <div class="date-box">
+                <el-date-picker
+                  v-model="dateValue"
+                  type="date"
+                  placeholder="选择日期">
+                </el-date-picker>
+              </div>
             </div>
           </li>
           <li>
@@ -191,7 +197,8 @@ export default {
         value: '身份证',
         label: '身份证'
       }],
-      value: ''
+      value: '',
+      dateValue: ''
     }
   },
   methods: {
@@ -321,6 +328,9 @@ export default {
               .input-440
                 flex: none
                 width: 440px
+              .date-box
+                width: 240px
+                height: 38px
           li:last-child
             padding-bottom: 0
         .submit-wrapper

@@ -10,6 +10,7 @@ import Login from '@/views/login'
 import Registered from '@/views/registered'
 import RetrievePassword from '@/views/retrievePassword'
 import MyDispute from '@/views/myDispute'
+import MyDisputeDetails from '@/views/myDispute/myDisputeDetails'
 import SecuritySettings from '@/views/securitySettings'
 import MyData from '@/views/myData'
 import MessageCenter from '@/views/messageCenter'
@@ -69,6 +70,11 @@ export default new Router({
       path: '/my_dispute',
       name: 'myDispute',
       component: MyDispute
+    },
+    {
+      path: '/my_dispute_details',
+      name: 'myDisputeDetails',
+      component: MyDisputeDetails
     },
     {
       path: '/security_settings',

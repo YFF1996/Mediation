@@ -20,7 +20,15 @@
         </div>
         <div class="time-wrapper">
           <p>时间：</p>
-          <input class="select-time" type="text" placeholder="请选择时间">
+          <div class="date-box">
+            <el-date-picker
+              v-model="dateValue"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </div>
           <div class="btn">查询</div>
         </div>
         <div class="table-wrapper">
@@ -49,7 +57,7 @@
               <div class="item">2019-12-12</div>
               <div class="item item-active">已受理</div>
               <div class="item item-text">
-                <p class="active">查看</p>
+                <p class="active" @click="onSkipPageFn('/my_dispute_details')">查看</p>
                 <div class="line"></div>
                 <p>取消申请</p>
               </div>
@@ -105,12 +113,16 @@ export default {
           title: '已受理案例'
         }
       ],
+      dateValue: '',
       currentPage: 1
     }
   },
   methods: {
     onItemFn (index) {
       this.currentIndex = index
+    },
+    onSkipPageFn (path) {
+      this.$router.push(path)
     },
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)
@@ -180,18 +192,9 @@ export default {
             line-height: 38px
             font-size: 16px
             color: #333
-          input
-            width: 250px
+          .date-box
             height: 38px
-            padding: 0 10px
-            font-size: 14px
             margin-right: 20px
-            border: 1px solid #ddd
-            border-radius: 4px
-            box-sizing: border-box
-          input::-webkit-input-placeholder
-                  font-size: 14px
-                  color: #999
           .btn
             width: auto
             height: 38px

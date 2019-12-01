@@ -18,7 +18,15 @@
           <p>关键词：</p>
           <input type="text" placeholder="请输入关键词">
           <p>时间：</p>
-          <input class="select-time" type="text" placeholder="请选择时间">
+          <div class="date-box">
+            <el-date-picker
+              v-model="dateValue"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </div>
           <div class="btn">搜索</div>
         </div>
         <related-cases-list :lists="lists" />
@@ -37,6 +45,7 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
+      dateValue: '',
       currendIndex: 0,
       navLists: [
         {
@@ -161,6 +170,9 @@ export default {
           input::-webkit-input-placeholder
                   font-size: 14px
                   color: #999
+          .date-box
+            height: 38px
+            margin-right: 20px
           .btn
             width: auto
             height: 38px

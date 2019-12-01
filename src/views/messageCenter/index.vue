@@ -45,22 +45,22 @@
             <div class="item">发布时间</div>
           </div>
           <ul>
-            <li>
+            <li @click="onShowHideFn(true)">
               <div class="item serial-number">1</div>
               <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">未受理</div>
+              <div class="item">张某</div>
               <div class="item">2019-12-12</div>
             </li>
-            <li>
+            <li @click="onShowHideFn(true)">
               <div class="item serial-number">2</div>
               <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">已受理</div>
+              <div class="item">黄某</div>
               <div class="item">2019-12-12</div>
             </li>
-            <li>
+            <li @click="onShowHideFn(true)">
               <div class="item serial-number">3</div>
               <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">未受理</div>
+              <div class="item">莫某</div>
               <div class="item">2019-12-12</div>
             </li>
           </ul>
@@ -75,6 +75,29 @@
             layout="total, prev, pager, next, sizes, jumper"
             :total="50">
           </el-pagination>
+        </div>
+      </div>
+    </div>
+    <div class="mask-wrapper" v-if="popUpsState">
+      <div class="pop-ups">
+        <div class="title">
+          <h3>消息详情</h3>
+          <img @click="onShowHideFn(false)" src="../../common/img/closed-icon.png" />
+        </div>
+        <div class="content">
+          <h1>《法制日报》新时代"发生地方就是发生的纠纷类似"，法定搜附近</h1>
+          <div class="deta-wrapper">
+            <p>发布人：张某额</p>
+            <p>发布时间：2018-05-31 15:30</p>
+          </div>
+          <div class="text-box">
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -111,7 +134,8 @@ export default {
           label: '已读消息'
         }
       ],
-      value: ''
+      value: '',
+      popUpsState: false
     }
   },
   methods: {
@@ -123,6 +147,9 @@ export default {
     },
     handleCurrentChange (val) {
       window.console.log(`当前页: ${val}`)
+    },
+    onShowHideFn (state) {
+      this.popUpsState = state
     }
   },
   components: {
@@ -256,6 +283,8 @@ export default {
             li
               width: 100%
               height: auto
+              transition: 0.3s
+              cursor: pointer
               display: flex
               .item
                 flex: 1
@@ -278,7 +307,78 @@ export default {
                 padding: 0
               .item:first-child
                 border-left: 1px solid #f2f2f2
+            li:hover
+              background-color: #e5e5e5
         .pagination-wrapper
           width: 100%
           height: auto
+    .mask-wrapper
+      position: fixed
+      left: 0
+      top: 0
+      right: 0
+      bottom: 0
+      width: 100%
+      height: 100%
+      display: flex
+      justify-content: center
+      align-items: center
+      background-color: rgba(0, 0, 0, 0.5)
+      .pop-ups
+        width: 680px
+        height: auto
+        border-radius: 4px
+        overflow: hidden
+        background-color: #fff
+        .title
+          width: 100%
+          height: auto
+          padding: 0 15px
+          display: flex
+          align-items: center
+          box-sizing: border-box
+          background-color: #d41a1d
+          h3
+            flex: 1
+            height: auto
+            line-height: 40px
+            font-size: 14px
+            color: #fff
+          img
+            width: 12px
+            height: 12px
+            cursor: pointer
+        .content
+          width: 100%
+          height: auto
+          padding: 10px 20px 35px 20px
+          box-sizing: border-box
+          h1
+            font-size: 18px
+            text-align: center
+            line-height: 50px
+            color: #333
+          .deta-wrapper
+            width: 100%
+            height: auto
+            display: flex
+            justify-content: center
+            p
+              padding: 0 15px
+              line-height: 20px
+              font-size: 14px
+              color: #999
+          .text-box
+            width: 100%
+            height: 400px
+            padding: 15px 25px
+            margin-top: 25px
+            border: 1px solid #e5e5e5
+            overflow: auto
+            box-sizing: border-box
+            p
+              font-size: 14px
+              line-height: 30px
+              text-indent: 2em
+              color: #333
 </style>

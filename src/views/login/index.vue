@@ -44,9 +44,7 @@
         </li>
       </ul>
       <p @click="onSkipPage('/retrieve_password')">忘记密码？</p>
-      <div class="btn-box">
-        <el-button :plain="true" @click="onLoginFn()">登录</el-button>
-      </div>
+      <div class="btn-box" @click="onLoginFn()">登录</div>
     </div>
     <footer-tempate :footerState="false" />
   </div>
@@ -212,10 +210,10 @@ export default {
       width: 100%
       height: auto
       border-radius: 4px
+      text-align: center
+      font-size: 24px
+      line-height: 60px
+      cursor: pointer
+      color: #fff
       background-color: #d41a1d
-      button
-        text-align: center
-        font-size: 24px
-        line-height: 60px
-        color: #fff
 </style>
