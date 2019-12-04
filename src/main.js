@@ -4,6 +4,7 @@ import router from '@/router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/common/css/style.css'
+import '@/common/css/my_advisory.css'
 import store from './store'
 
 Vue.use(ElementUI)
