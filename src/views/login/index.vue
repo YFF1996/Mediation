@@ -62,7 +62,13 @@ export default {
       imgCodeVal: ''
     }
   },
+  mounted(){
+    this.getCaptcha();
+  },
   methods: {
+    getCaptcha () {
+      this.$http.adornUrl(`/sys/user/captcha.jpg?uuid=${'12323'}`)
+    },
     ...mapMutations({
       setLsLoginState: 'SET_LS_LOGIN_STATE'
     }),
@@ -83,9 +89,26 @@ export default {
         this.$message.error('验证码不对!')
         return false
       }
-      window.localStorage.setItem('setLsLoginState', true)
-      this.setLsLoginState(true)
-      this.onSkipPage('/')
+      this.$http({
+        url: this.$http.adornUrl('/user/login'),
+        method: 'post',
+        data: this.$http.adornData({
+          'username': this.accountVal,
+          'password': this.passwordVal,
+          'captcha': this.imgCodeVal
+        })
+      }).then(({data}) => {
+        if (data && data.code == 200) {
+          this.$cookie.set('token', data.token)
+          this.$router.replace({ name: 'home' })
+        } else {
+          this.getCaptcha()
+          this.$message.error(data.msg)
+        }
+      })
+      //window.localStorage.setItem('setLsLoginState', true)
+      //this.setLsLoginState(true)
+      //this.onSkipPage('/')
     },
     // 跳转页面
     onSkipPage (path) {
