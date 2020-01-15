@@ -40,7 +40,9 @@
             </div>
             <input type="text" v-model="imgCodeVal" placeholder="图形验证码" />
           </div>
-          <div class="code-img"></div>
+          <div class="code-img">
+            <img style="width: 120px;height: 100%" :src="captchaPath" @click="getCaptcha()" alt="">
+          </div>
         </li>
       </ul>
       <p @click="onSkipPage('/retrieve_password')">忘记密码？</p>
@@ -59,6 +61,8 @@ export default {
     return {
       accountVal: '',
       passwordVal: '',
+        captchaPath: '',
+        uuid: '',
       imgCodeVal: ''
     }
   },
@@ -67,7 +71,22 @@ export default {
   },
   methods: {
     getCaptcha () {
-      this.$http.adornUrl(`/sys/user/captcha.jpg?uuid=${'12323'}`)
+        this.$http({
+            url: this.$http.adornUrl('/api/getCaptcha'),
+            method: 'get',
+            data: this.$http.adornParams({
+
+            })
+        }).then(({data}) => {
+            if (data && data.code == 200) {
+                this.uuid = data.data.key
+            } else {
+                this.getCaptcha()
+                this.$message.error(data.msg)
+            }
+        }).then(() => {
+            this.captchaPath = this.$http.adornUrl(`/api/captcha.jpg?uuid=${this.uuid}`)
+        })
     },
     ...mapMutations({
       setLsLoginState: 'SET_LS_LOGIN_STATE'
@@ -90,17 +109,19 @@ export default {
         return false
       }
       this.$http({
-        url: this.$http.adornUrl('/user/login'),
+        url: this.$http.adornUrl('/api/login'),
         method: 'post',
         data: this.$http.adornData({
-          'username': this.accountVal,
+          'realName': this.accountVal,
           'password': this.passwordVal,
-          'captcha': this.imgCodeVal
+          'captcha': this.imgCodeVal,
+            'captchaKey':this.uuid,
+            'type':0
         })
       }).then(({data}) => {
         if (data && data.code == 200) {
           this.$cookie.set('token', data.token)
-          this.$router.replace({ name: 'home' })
+            this.onSkipPage('/')
         } else {
           this.getCaptcha()
           this.$message.error(data.msg)

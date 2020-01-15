@@ -7,7 +7,7 @@
           <h3>真实姓名</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入真实姓名" />
+          <input type="text" v-model="dataForm.realname" placeholder="请输入真实姓名" />
         </div>
       </li>
       <li>
@@ -32,7 +32,7 @@
           <h3>输入证件号</h3>
         </div>
         <div class="input-box">
-          <input type="number" placeholder="请输入真实的证件号(此号为登录名)" />
+          <input type="number" v-model="dataForm.username"  placeholder="请输入真实的证件号(此号为登录名)" />
         </div>
       </li>
       <li>
@@ -41,8 +41,10 @@
           <h3>输入验证号</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入图片验证码" />
-          <div class="code-img"></div>
+          <input type="text" v-model="dataForm.captcha" placeholder="请输入图片验证码" />
+          <div class="code-img">
+            <img style="width: 120px;height: 100%" :src="captchaPath" @click="getCaptcha()" alt="">
+          </div>
         </div>
       </li>
       <li>
@@ -51,13 +53,13 @@
           <h3>输入手机号</h3>
         </div>
         <div class="input-box">
-          <input type="number" placeholder="请输入你的手机号码" />
+          <input type="number" v-model="dataForm.mobile" placeholder="请输入你的手机号码" />
         </div>
       </li>
       <li>
         <div class="name"></div>
         <div class="input-box">
-          <input type="number" placeholder="请输入6位验证码" />
+          <input type="number"  v-model="dataForm.smsCode" placeholder="请输入6位验证码" />
           <div class="get-code-btn" @click="onGetCodeFn()" v-if="second === 60">{{ codeText }}</div>
           <div class="get-code-btn" v-else>{{ second }}s</div>
         </div>
@@ -68,7 +70,7 @@
           <h3>设置密码</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请设置密码，8~20个字符，由大写字母、小写字母和数字组成" />
+          <input  v-model="dataForm.password" type="text" placeholder="请设置密码，8~20个字符，由大写字母、小写字母和数字组成" />
         </div>
       </li>
       <li>
@@ -98,20 +100,68 @@ let stop = null
 export default {
   data() {
     return {
+        captchaPath: '',
+        uuid: '',
       options: [{
         value: '身份证',
         label: '身份证'
       }],
+        dataForm: {
+            userName: '',
+            realname: '',
+            mobile: '',
+            password: '',
+            uuid: '',
+            smsCode:'',
+            captcha: ''
+        },
       value: '',
       checked: false,
       second: 60,
       codeText: '免费获取验证码'
     }
   },
+    mounted(){
+        this.getCaptcha();
+    },
   methods: {
     onNextFn () {
-      this.$emit('createNextChild', 1)
+        this.$http({
+            url: this.$http.adornUrl('/api/register'),
+            method: 'post',
+            data: this.$http.adornData({
+                'username':this.dataForm.username,
+                'smsCode': this.dataForm.smsCode,
+                'mobile':this.dataForm.mobile,
+                'realname':this.dataForm.realname,
+                'password': this.dataForm.password,
+                'captcha':this.dataForm.captcha,
+            })
+        }).then(({data}) => {
+            if (data && data.code == 200) {
+                this.$emit('createNextChild', 1)
+            }
+        })
+
     },
+      getCaptcha () {
+          this.$http({
+              url: this.$http.adornUrl('/api/getCaptcha'),
+              method: 'get',
+              data: this.$http.adornParams({
+
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.uuid = data.data.key
+              } else {
+                  this.getCaptcha()
+                  this.$message.error(data.msg)
+              }
+          }).then(() => {
+              this.captchaPath = this.$http.adornUrl(`/api/captcha.jpg?uuid=${this.uuid}`)
+          })
+      },
     onGetCodeFn () {
       stop = setInterval(() => {
         this.second --
@@ -120,8 +170,18 @@ export default {
           this.codeText = '重新获取验证码'
           window.clearInterval(stop)
         }
-      }, 1000)
-    }
+      }, 1000),
+            this.$http({
+                url: this.$http.adornUrl('/api/sms/code'),
+                method: 'post',
+                data: this.$http.adornData({
+                    'mobile':this.dataForm.mobile,
+                    'smsmode':'1'
+                })
+            }).then(({data}) => {
+                console.log(data)
+            })
+        }
   }
 }
 </script>
