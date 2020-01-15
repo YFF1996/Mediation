@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import HeaderNav from '@/components/headerNavTemplate'
 import IndexBanner from '@/components/indexBannerTemplate'
 import IndexSpecial from '@/components/indexSpecialTemplate'
@@ -20,6 +21,24 @@ import IndexNews from '@/components/indexNewsTemplate'
 import FooterTempate from '@/components/footerTemplate'
 
 export default {
+  created () {
+    this.getDataFn()
+  },
+  methods: {
+    getDataFn () {
+      this.$http.request(
+        {
+          method: 'post',
+          url: '/lottery/luck.php',
+          data: qs.stringify({
+              title: '标题'
+          })
+        }
+      ).then((res) => {
+        window.console.log(res)
+      })
+    }
+  },
   components: {
     HeaderNav,
     IndexBanner,
