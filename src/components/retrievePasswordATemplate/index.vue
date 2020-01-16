@@ -7,14 +7,7 @@
           <h3>证件号码</h3>
         </div>
         <div class="input-box">
-          <el-select v-model="value" clearable placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
+          <input type="number" v-model="dataForm.username"  placeholder="请输入真实的证件号(此号为登录名)" />
         </div>
       </li>
       <li>
@@ -23,13 +16,13 @@
           <h3>输入手机号</h3>
         </div>
         <div class="input-box">
-          <input type="number" placeholder="请输入你的手机号码" />
+          <input type="number" v-model="dataForm.mobile" placeholder="请输入你的手机号码" />
         </div>
       </li>
       <li>
         <div class="name"></div>
         <div class="input-box">
-          <input type="number" placeholder="请输入6位验证码" />
+          <input type="number" v-model="dataForm.smsCode" placeholder="请输入6位验证码" />
           <div class="get-code-btn" @click="onGetCodeFn()" v-if="second === 60">{{ codeText }}</div>
           <div class="get-code-btn" v-else>{{ second }}s</div>
         </div>
@@ -52,6 +45,11 @@ export default {
         value: '身份证',
         label: '身份证'
       }],
+      dataForm:{
+        username:'',
+        mobile:'',
+        smsCode:''
+      },
       value: '',
       second: 60,
       codeText: '免费获取验证码'
@@ -60,6 +58,22 @@ export default {
   methods: {
     onNextFn () {
       this.$emit('nextChild', 1)
+      this.$http({
+        url: this.$http.adornUrl('/api/verify/'),
+        method: 'post',
+        data: this.$http.adornData({
+          'mobile':this.dataForm.mobile,
+          'smsmode':this.dataForm.smsCode,
+          'username':this.dataForm.username
+        })
+      }).then(({data}) => {
+        if (data.data.code == 200){
+          this.$emit('nextChild', 1)
+        }  else {
+           this.$message.error(data.data.msg)
+        }
+      })
+
     },
     onGetCodeFn () {
       stop = setInterval(() => {
@@ -69,7 +83,17 @@ export default {
           this.codeText = '重新获取验证码'
           window.clearInterval(stop)
         }
-      }, 1000)
+      }, 1000),
+              this.$http({
+        url: this.$http.adornUrl('/api/sms/code'),
+        method: 'post',
+        data: this.$http.adornData({
+          'mobile':this.dataForm.mobile,
+          'smsmode':'2'
+        })
+      }).then(({data}) => {
+        console.log(data)
+      })
     }
   }
 }

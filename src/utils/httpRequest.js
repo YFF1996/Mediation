@@ -41,8 +41,8 @@ http.interceptors.response.use(response => {
  * @param {*} actionName action方法名称
  */
 http.adornUrl = (actionName) => {
-  // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!http://10.196.85.115:8082/hc-online/
-  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? 'http://192.168.0.100:8082/hc-online/' :'http://192.168.0.100:8082/hc-online/') + actionName
+  // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!http://10.196.85.115:8082/hc-online/    http://192.168.0.100:8082/hc-online/
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? 'http://10.196.85.115:8082/hc-online' :'http://10.196.85.115:8082/hc-online') + actionName
 }
 
 /**

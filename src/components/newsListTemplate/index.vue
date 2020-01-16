@@ -11,8 +11,8 @@
         </div>
         <div class="news-text">
           <h2>{{ item.title }}</h2>
-          <p>{{ item.description }}</p>
-          <div class="date-box">{{ item.time }}</div>
+          <p>{{ item.content }}</p>
+          <div class="date-box">{{ item.createTime }}</div>
         </div>
       </li>
     </ul>
@@ -34,7 +34,8 @@
 export default {
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
+      pageSize:10
     }
   },
   methods: {
@@ -43,10 +44,34 @@ export default {
     },
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)
+      this.pageSize = val
+
     },
     handleCurrentChange (val) {
       window.console.log(`当前页: ${val}`)
-    }
+      this.currentPage = val
+      this.getDataList();
+    },
+    // 获取数据列表
+    getDataList () {
+      this.$http({
+        url: this.$http.adornUrl('/api/news/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.currentPage,
+          'pagesize': this.pageSize,
+        })
+      }).then(({data}) => {
+        if (data && data.code == 200) {
+          this.navLists = data.data.list
+          this.lists = data.data.list
+          this.totalPage = data.data.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+      })
+    },
   },
   props: ['lists']
 }

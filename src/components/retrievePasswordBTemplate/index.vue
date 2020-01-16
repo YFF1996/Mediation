@@ -7,7 +7,7 @@
           <h3>重置密码</h3>
         </div>
         <div class="input-box">
-          <input type="password" placeholder="请输入新密码" />
+          <input type="password" v-model="dataForm.password"  placeholder="请输入新密码" />
         </div>
       </li>
       <li>
@@ -16,13 +16,13 @@
           <h3>确认密码</h3>
         </div>
         <div class="input-box">
-          <input type="password" placeholder="请再次输入新密码" />
+          <input type="password" v-model="dataForm.okPassword" placeholder="请再次输入新密码" />
         </div>
       </li>
     </ul>
     <div class="submit-wrapper">
       <div class="btn">下一步</div>
-      <div class="btn btn-active">下一步</div>
+      <div class="btn btn-active" @click="onNextFn()">下一步</div>
     </div>
   </div>
 </template>
@@ -30,9 +30,41 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        dataForm:{
+          username:'',
+          newPassword:'',
+          okPassword:'',
+        },
+      }
     },
     methods: {
+      onNextFn () {
+        if (this.dataForm.password != this.dataForm.okPassword ){
+          this.$message.error("两次密码不一致")
+          return;
+        }
+        if (this.$cookie.get("username") == null) {
+          this.$message.error("请先登录");
+          return;
+        }
+        this.$http({
+          url: this.$http.adornUrl('/api/sms/code'),
+          method: 'post',
+          data: this.$http.adornData({
+            'newPassword':this.dataForm.newPassword,
+            'username':this.$cookie.get("username")
+          })
+        }).then(({data}) => {
+          if (data.data.code == 200){
+            this.$message.success(data.data.msg)
+            this.$router.push("/login")
+          }  else {
+            this.$message.error(data.data.msg)
+          }
+        })
+
+      },
     }
   }
 </script>
@@ -96,10 +128,11 @@
         font-size: 18px
         cursor: pointer
         border-radius: 4px
+        display: none
         color: #bdbdbd
         background-color: #ebebeb
       .btn-active
-        display: none
+        display: block
         color: #fff
         background-color: #d41a1d
 </style>

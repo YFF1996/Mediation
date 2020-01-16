@@ -14,9 +14,11 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
+                  :data="category"
                   :on-success="handleAvatarSuccessA"
+                  :before-upload="beforeUploadHandle1"
                 >
                 </el-upload>
                 <img src="../../common/img/update-sfz-icon.png" />
@@ -32,9 +34,11 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
+                  :data="category"
                   :on-success="handleAvatarSuccessB"
+                  :before-upload="beforeUploadHandle2"
                 >
                 </el-upload>
                 <img src="../../common/img/update-sfz-icon.png" />
@@ -58,9 +62,11 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
+                  :data="category"
                   :on-success="handleAvatarSuccessC"
+                  :before-upload="beforeUploadHandle3"
                 >
                 </el-upload>
                 <img src="../../common/img/update-csimg-icon.png" />
@@ -87,21 +93,58 @@ export default {
     return {
       imageUrlA: '',
       imageUrlB: '',
+      category:{
+        'type':'',
+        'username':'',
+      },
       imageUrlC: ''
     }
   },
   methods: {
     onNextFn () {
-      this.$emit('createNextChild', 2)
+      if (this.imageUrlB.length>0&this.imageUrlC.length>0&&this.imageUrlA.length>0) {
+        this.$emit('createNextChild', 2)
+      } else {
+        this.$message.error("证件上传失败，请刷新界面重新上传")
+      }
     },
-    handleAvatarSuccessA (res, file) {
-      this.imageUrlA = URL.createObjectURL(file.raw)
+    // 上传之前
+    beforeUploadHandle1 () {
+    this.category.type = '1';
+    this.category.username = this.$cookie.get('username')
     },
-    handleAvatarSuccessB (res, file) {
-      this.imageUrlB = URL.createObjectURL(file.raw)
+    // 上传之前
+    beforeUploadHandle2 () {
+      this.category.type ='2';
+      this.category.username = this.$cookie.get('username')
     },
-    handleAvatarSuccessC (res, file) {
-      this.imageUrlC = URL.createObjectURL(file.raw)
+    // 上传之前
+    beforeUploadHandle3 () {
+      this.category.type = '3';
+      this.category.username = this.$cookie.get('username')
+    },
+    handleAvatarSuccessA (response, file) {
+      if (response && response.code == 200) {
+        this.imageUrlA = URL.createObjectURL(file.raw)
+      } else {
+        this.$message.error(response.msg)
+      }
+
+    },
+    handleAvatarSuccessB (response, file) {
+      if (response && response.code == 200) {
+        this.imageUrlB = URL.createObjectURL(file.raw)
+      } else {
+        this.$message.error(response.msg)
+      }
+
+    },
+    handleAvatarSuccessC (response, file) {
+      if (response && response.code == 200) {
+        this.imageUrlC = URL.createObjectURL(file.raw)
+      } else {
+        this.$message.error(response.msg)
+      }
     }
   }
 }

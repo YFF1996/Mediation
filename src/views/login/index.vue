@@ -120,7 +120,12 @@ export default {
         })
       }).then(({data}) => {
         if (data && data.code == 200) {
-          this.$cookie.set('token', data.token)
+          this.$cookie.set('token', data.data.token)
+          this.$cookie.set('username', data.data.username)
+          this.$cookie.set('realname', data.data.realname)
+          window.localStorage.setItem('setLsLoginState', true)
+          window.sessionStorage.setItem('realname',data.data.realname)
+          this.setLsLoginState(true)
             this.onSkipPage('/')
         } else {
           this.getCaptcha()

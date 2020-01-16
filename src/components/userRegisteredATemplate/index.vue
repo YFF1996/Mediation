@@ -4,10 +4,10 @@
       <li>
         <div class="name">
           <p>*</p>
-          <h3>真实姓名</h3>
+          <h3>平台账号</h3>
         </div>
         <div class="input-box">
-          <input type="text" v-model="dataForm.realname" placeholder="请输入真实姓名" />
+          <input type="text" v-model="dataForm.realname" placeholder="请输入账号" />
         </div>
       </li>
       <li>
@@ -76,7 +76,7 @@
       <li>
         <div class="name"></div>
         <div class="input-box">
-          <input type="text" placeholder="再次输入密码" />
+          <input type="text" v-model="dataForm.rePassword" placeholder="再次输入密码" />
         </div>
       </li>
     </ul>
@@ -111,6 +111,7 @@ export default {
             realname: '',
             mobile: '',
             password: '',
+          rePassword:'',
             uuid: '',
             smsCode:'',
             captcha: ''
@@ -126,6 +127,10 @@ export default {
     },
   methods: {
     onNextFn () {
+      if (this.dataForm.password != this.dataForm.rePassword){
+        this.$message.error("两次密码不一致")
+        return;
+      }
         this.$http({
             url: this.$http.adornUrl('/api/register'),
             method: 'post',
@@ -139,7 +144,13 @@ export default {
             })
         }).then(({data}) => {
             if (data && data.code == 200) {
+              alert(data.data.username)
+              this.$cookie.set("username",data.data.username);
+              alert(this.$cookie.get("username"))
                 this.$emit('createNextChild', 1)
+
+            } else {
+              this.$message.error(data.msg)
             }
         })
 

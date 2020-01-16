@@ -25,7 +25,7 @@
             <img v-if="navState" src="../../common/img/message-bs-icon.png" />
             <img v-else src="../../common/img/message-icon.png" />
           </div>
-          <p :style="{ color: navState ? '#fff' : '#000' }">欢迎您！YFF</p>
+          <p :style="{ color: navState ? '#fff' : '#000' }">欢迎您！{{realname}}</p>
           <div class="more-icon">
             <img v-if="navState" src="../../common/img/pull-down-bs-icon.png" />
             <img v-else src="../../common/img/pull-down-icon.png" />
@@ -63,6 +63,11 @@ export default {
     this.setLsLoginState(state)
   },
   computed: {
+    realname: {
+      get () {
+        return window.sessionStorage.getItem('realname')
+      }
+    },
     ...mapState([
       'isLoginState'
     ])

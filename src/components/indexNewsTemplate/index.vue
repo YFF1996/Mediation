@@ -100,9 +100,31 @@ export default {
       ]
     }
   },
+  created () {
+    this.getDataList()
+  },
   methods: {
-    onChangeFn (index) {
+    onChangeFn(index) {
       this.currendIndex = index
+    },
+    getDataList() {
+      this.$http({
+        url: this.$http.adornUrl('/api/file/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'pagesize': this.pageSize,
+          'status':1
+        })
+      }).then(({data}) => {
+        if (data && data.code == 200) {
+          this.lists = data.data.list
+          this.totalPage = data.data.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+      })
     }
   }
 }
