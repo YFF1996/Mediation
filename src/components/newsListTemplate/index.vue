@@ -63,7 +63,6 @@ export default {
         })
       }).then(({data}) => {
         if (data && data.code == 200) {
-          this.navLists = data.data.list
           this.lists = data.data.list
           this.totalPage = data.data.totalCount
         } else {

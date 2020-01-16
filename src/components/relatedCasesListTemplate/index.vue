@@ -6,10 +6,10 @@
         :key="index"
         @click="onSkipPageFn()"
       >
-        <h3>{{ item.title }}</h3>
+        <h3>{{ item.content }}</h3>
         <div class="time-wrapper">
-          <p>发布时间：{{ item.time }}</p>
-          <div class="mark">{{ item.mark }}</div>
+          <p>发布时间：{{ item.createTime }}</p>
+          <div class="mark">{{ item.paramsKey }}</div>
         </div>
       </li>
     </ul>
@@ -31,19 +31,43 @@
 export default {
   data() {
     return {
-      currentPage: 0
+      currentPage: 0,
+        currentLists:this.lists
     }
   },
   methods: {
     onSkipPageFn () {
       this.$router.push('/related_cases_details')
     },
-    handleSizeChange (val) {
-      window.console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange (val) {
-      window.console.log(`当前页: ${val}`)
-    }
+      handleSizeChange (val) {
+          window.console.log(`每页 ${val} 条`)
+          this.pageSize = val
+
+      },
+      handleCurrentChange (val) {
+          window.console.log(`当前页: ${val}`)
+          this.currentPage = val
+          this.getDataList();
+      },
+      // 获取数据列表
+      getDataList () {
+          this.$http({
+              url: this.$http.adornUrl('/api/case/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'page': this.currentPage,
+                  'pagesize': this.pageSize,
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.currentLists = data.data.list
+                  this.totalPage = data.data.totalCount
+              } else {
+                  this.dataList = []
+                  this.totalPage = 0
+              }
+          })
+      },
   },
   props: ['lists']
 }

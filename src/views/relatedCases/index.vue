@@ -6,6 +6,9 @@
       <div class="left-nav-wrapper">
         <ul>
           <li
+                  @click="onNavItemFn(0)"
+          >全部</li>
+          <li
             v-for="(item, index) in navLists"
             :class="{'active' : currendIndex === index}"
             :key="index"
@@ -16,18 +19,21 @@
       <div class="related-right">
         <div class="select-wrapper">
           <p>关键词：</p>
-          <input type="text" placeholder="请输入关键词">
+          <input type="text" v-model="key" placeholder="请输入关键词">
           <p>时间：</p>
           <div class="date-box">
             <el-date-picker
               v-model="dateValue"
               type="daterange"
+              value-format="yyyy-MM-dd HH:mm:ss"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
           </div>
-          <div class="btn">搜索</div>
+          <div class="submit-wrapper">
+            <div class="btn btn-active" @click="search()">搜索</div>
+          </div>
         </div>
         <related-cases-list :lists="lists" />
       </div>
@@ -45,61 +51,92 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
-      dateValue: '',
+      dateValue: [],
       currendIndex: 0,
+        data:[],
+        key:'',
       navLists: [
         {
-          title: '全部'
+            paramsKey: '全部'
         },
         {
-          title: '婚姻家庭'
+            paramsKey: '婚姻家庭'
         },
         {
-          title: '道路纠纷'
+            paramsKey: '道路纠纷'
         },
         {
-          title: '物业纠纷'
+            paramsKey: '物业纠纷'
         },
         {
-          title: '劳动纠纷'
+            paramsKey: '劳动纠纷'
         },
         {
-          title: '医疗纠纷'
+            paramsKey: '医疗纠纷'
         }
       ],
       lists: [
         {
-          title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
+            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
           time: '2019-11-11',
           mark: '婚姻家庭'
+        },
+        {
+            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
+            createTime: '2019-11-11',
+            paramsKey: '婚姻家庭'
+        },
+        {
+            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
+            createTime: '2019-11-11',
+            paramsKey: '婚姻家庭'
         },
         {
           title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-          time: '2019-11-11',
-          mark: '婚姻家庭'
+            createTime: '2019-11-11',
+            paramsKey: '婚姻家庭'
         },
         {
-          title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
-          time: '2019-11-11',
-          mark: '婚姻家庭'
-        },
-        {
-          title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-          time: '2019-11-11',
-          mark: '婚姻家庭'
-        },
-        {
-          title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-          time: '2019-11-11',
-          mark: '婚姻家庭'
+            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
+            createTime: '2019-11-11',
+            paramsKey: '婚姻家庭'
         }
       ]
     }
   },
+    created () {
+        this.getDataList()
+    },
   methods: {
+      search () {
+         this.getDataList ()
+      },
     onNavItemFn (index) {
       this.currendIndex = index
-    }
+    },
+// 获取数据列表
+getDataList () {
+    this.$http({
+        url: this.$http.adornUrl('/api/case/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'pagesize': this.pageSize,
+            'startTime':this.dateValue[0],
+            'endTime':this.dateValue[1],
+            'key':this.key
+        })
+    }).then(({data}) => {
+        if (data && data.code == 200) {
+            this.navLists = data.data.list
+            this.lists = data.data.list
+            this.totalPage = data.data.totalCount
+        } else {
+            this.dataList = []
+            this.totalPage = 0
+        }
+    })
+},
   },
   components: {
     HeaderNav,
