@@ -7,7 +7,7 @@
           <h2>纠纷专题</h2>
           <img src="../../common/img/index-title-right.png" />
         </div>
-        <p>说明说明说明说明</p>
+        <p>简要说明</p>
       </div>
       <div class="special-content">
         <div class="line"></div>
@@ -53,8 +53,9 @@
           </li>
         </ul>
       </div>
-      <div class="btn-box">
-        <router-link to="/my_mediate">立即申请</router-link>
+      <div  class="btn-box">
+        <router-link to="/my_mediate" v-if="realname != null">立即申请</router-link>
+        <router-link to="/registered" v-if="realname == null">立即申请</router-link>
       </div>
     </div>
   </div>
@@ -62,9 +63,17 @@
 
 <script>
   export default {
-    data() {
-      return {}
-    }
+    data () {
+      return {
+      }
+    },
+    computed: {
+      realname: {
+        get () {
+          return window.sessionStorage.getItem('realname')
+        }
+      },
+    },
   }
 </script>
 

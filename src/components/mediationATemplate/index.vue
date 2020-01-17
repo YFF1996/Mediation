@@ -7,7 +7,7 @@
           <h3>申请人类型</h3>
         </div>
         <div class="radio-box">
-          <el-radio-group v-model="nameTypeRadio">
+          <el-radio-group v-model="dataForm.type">
             <el-radio :label="0">自然人</el-radio>
             <el-radio :label="1">法人</el-radio>
             <el-radio :label="2">非法人组织</el-radio>
@@ -20,7 +20,7 @@
           <h3>申请人姓名</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入你的手机号" />
+          <input type="text" v-model="dataForm.name" placeholder="请输入申请人姓名" />
         </div>
       </li>
       <li>
@@ -32,14 +32,14 @@
           <div class="select-box">
             <el-select v-model="value" clearable placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
               </el-option>
             </el-select>
           </div>
-          <input type="text" placeholder="请输入你的证件号">
+          <input type="text" v-model="dataForm.cardNumber" placeholder="请输入你的证件号">
         </div>
       </li>
       <li>
@@ -48,7 +48,7 @@
           <h3>申请人性别</h3>
         </div>
         <div class="radio-box">
-          <el-radio-group v-model="sexTypeRadio">
+          <el-radio-group v-model="dataForm.sex">
             <el-radio :label="0">男</el-radio>
             <el-radio :label="1">女</el-radio>
             <el-radio :label="2">其他</el-radio>
@@ -61,7 +61,7 @@
           <h3>联系电话</h3>
         </div>
         <div class="input-box">
-          <input type="number" placeholder="请输入你的手机号码" />
+          <input type="number" v-model="dataForm.phone" placeholder="请输入你的手机号码" />
         </div>
       </li>
       <li>
@@ -70,7 +70,7 @@
           <h3>其他联系方式</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入其他手机号码" />
+          <input type="text" v-model="dataForm.mobile"  placeholder="请输入其他手机号码" />
         </div>
       </li>
       <li>
@@ -79,7 +79,7 @@
           <h3>常住地址</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入你的常住地址" />
+          <input type="text" v-model="dataForm.currentAddress" placeholder="请输入你的常住地址" />
         </div>
       </li>
       <li>
@@ -88,7 +88,7 @@
           <h3>详细地址</h3>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="请输入你的详细地址" />
+          <input type="text" v-model="dataForm.address" placeholder="请输入你的详细地址" />
         </div>
       </li>
     </ul>
@@ -100,24 +100,63 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      nameTypeRadio: 0,
-      sexTypeRadio: 0,
-      options: [{
-        value: '身份证',
-        label: '身份证'
-      }],
-      value: ''
-    }
-  },
-  methods: {
-    onNextFn () {
-      this.$emit('nextChild', 1)
+  export default {
+    data() {
+      return {
+        dataForm: {
+          id: 0,
+          type: '',
+          name: '',
+          cardName: '',
+          phone:'',
+          sex: 1,
+          mobile: '',
+          address: '',
+          currentAddress:'',
+          remark: ''
+        },
+        sexTypeRadio: 0,
+        options: [{
+          value: '身份证',
+          label: '身份证'
+        }],
+        value: ''
+      }
+    },
+    methods: {
+      onNextFn () {
+        let username = this.$cookie.get("username");
+        if (username == null) {
+          this.$message.error("请先登录")
+          return
+        }
+        this.$http({
+          url: this.$http.adornUrl('/api/application/save'),
+          method: 'post',
+          data: this.$http.adornData({
+            'name':this.dataForm.name,
+            'type': this.dataForm.type,
+            'cardName':this.value,
+            'cardNumber':this.dataForm.cardNumber,
+            'sex': this.dataForm.sex,
+            'phone':this.dataForm.phone,
+            'mobile':this.dataForm.mobile,
+            'address': this.dataForm.address,
+            'currentAddress':this.dataForm.currentAddress,
+          })
+        }).then(({data}) => {
+          if (data && data.code == 200) {
+            this.$cookie.set("username",data.data.username);
+            this.$emit('nextChild', 1)
+
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+
+      },
     }
   }
-}
 </script>
 
 <style lang="stylus" scoped>
