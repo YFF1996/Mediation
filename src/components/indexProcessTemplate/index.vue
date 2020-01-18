@@ -54,7 +54,7 @@
         </ul>
       </div>
       <div  class="btn-box">
-        <router-link to="/my_mediate" v-if="realname != null">立即申请</router-link>
+        <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
         <router-link to="/registered" v-if="realname == null">立即申请</router-link>
       </div>
     </div>

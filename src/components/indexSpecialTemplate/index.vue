@@ -19,7 +19,7 @@
           </div>
           <h3>婚姻家庭</h3>
           <div class="btn-box">
-            <a href="#">申请</a>
+            <router-link to="/registered" v-if="realname == null">申请</router-link>
           </div>
         </li>
         <li>
@@ -31,7 +31,7 @@
           </div>
           <h3>道路纠纷</h3>
           <div class="btn-box">
-            <a href="#">申请</a>
+            <router-link to="/registered" v-if="realname == null">申请</router-link>
           </div>
         </li>
         <li>
@@ -43,7 +43,7 @@
           </div>
           <h3>物业纠纷</h3>
           <div class="btn-box">
-            <a href="#">申请</a>
+            <router-link to="/registered" v-if="realname == null">申请</router-link>
           </div>
         </li>
         <li>
@@ -55,7 +55,7 @@
           </div>
           <h3>劳动纠纷</h3>
           <div class="btn-box">
-            <a href="#">申请</a>
+            <router-link to="/registered" v-if="realname == null">申请</router-link>
           </div>
         </li>
         <li>
@@ -66,8 +66,8 @@
             </div>
           </div>
           <h3>医疗纠纷</h3>
-          <div class="btn-box">
-            <a href="#">申请</a>
+          <div class="btn-box" >
+            <router-link to="/registered" v-if="realname == null">申请</router-link>
           </div>
         </li>
       </ul>
@@ -79,7 +79,12 @@
   export default {
     data() {
       return {}
-    }
+    },
+      method:{
+          submit(){
+              this.$router.push('/online_mediation');
+          },
+      }
   }
 </script>
 

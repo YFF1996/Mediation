@@ -8,7 +8,7 @@ module.exports = {
         // open: true, //配置自动启动浏览器
         proxy: {
             '/api': {
-                target: 'http://10.196.85.115:8082/hc-online', //对应自己的接口
+                target: 'http://192.168.0.101:8082/hc-online', //对应自己的接口
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {

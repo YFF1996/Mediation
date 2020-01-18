@@ -146,7 +146,7 @@
           })
         }).then(({data}) => {
           if (data && data.code == 200) {
-            this.$cookie.set("username",data.data.username);
+              window.localStorage.setItem("respondentId",data.data.applicationId)
             this.$emit('nextChild', 2)
           } else {
             this.$message.error(data.msg)

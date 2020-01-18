@@ -2,7 +2,7 @@
   <div class="my-nav-wrapper">
     <div class="avatar-box">
       <img src="../../common/img/my-img.png" />
-      <h3>李建国</h3>
+      <h3>{{realname}}</h3>
     </div>
     <ul>
       <li>
@@ -21,7 +21,13 @@
   export default {
     data() {
       return {}
-    }
+    },computed: {
+          realname: {
+              get() {
+                  return window.sessionStorage.getItem('realname')
+              }
+          },
+      }
   }
 </script>
 

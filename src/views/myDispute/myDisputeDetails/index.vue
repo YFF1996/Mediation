@@ -9,16 +9,16 @@
           <div class="name-box">
             <div class="item">
               <h3>申请人：</h3>
-              <p>喵叽叽</p>
+              <p>{{dataForm.applicationName}}</p>
             </div>
             <div class="item">
               <h3>被申请人：</h3>
-              <p>张丽莎</p>
+              <p>{{dataForm.respondentName}}</p>
             </div>
           </div>
           <div class="description-box">
-            <h3>调解进度：</h3>
-            <p>本案你是连接方式劳动纠纷，精神分裂时间oil纠纷、放假时间劳动纠纷建设路附近，店了解到垃圾变好啦，解放路圣诞节家乐福结算单。圣诞节福利啥的积分附件</p>
+            <h3>调解内容：</h3>
+            <p>{{dataForm.detail}}</p>
           </div>
           <div class="schedule-box">
             <h3>调解进度</h3>
@@ -30,15 +30,14 @@
                 </div>
                 <div class="schedule-right">
                   <div class="top">
-                    <h3>2019-11-11</h3>
-                    <p>09:25:05</p>
+                    <h3>{{dataForm.createTime}}</h3>
                     <div class="status">
                       <img src="../../../common/img/green-complete-icon.png" />
                       <span>已确认</span>
                     </div>
                   </div>
                   <div class="text">
-                    <p>调解员张张已申请结案，调解协议已生成，请确认。</p>
+                    <p>联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
                     <div class="btn" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
@@ -50,11 +49,10 @@
                 </div>
                 <div class="schedule-right">
                   <div class="top">
-                    <h3>2019-11-11</h3>
-                    <p>09:25:05</p>
+                    <h3>{{dataForm.createTime1}}</h3>
                   </div>
                   <div class="text">
-                    <p>调解员张张已申请结案，调解协议已生成，请确认。</p>
+                    <p>调解员{{dataForm.mediateName}}已确认受理。</p>
                     <div class="btn" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
@@ -66,11 +64,10 @@
                 </div>
                 <div class="schedule-right">
                   <div class="top">
-                    <h3>2019-11-11</h3>
-                    <p>09:25:05</p>
+                    <h3>{{dataForm.createTime2}}</h3>
                   </div>
                   <div class="text">
-                    <p>调解员张张已申请结案，调解协议已生成，请确认。</p>
+                    <p>联络员{{dataForm.mediateName}}已结案</p>
                   </div>
                 </div>
               </li>
@@ -188,12 +185,43 @@ export default {
           title: '调解协议'
         }
       ],
+        dataForm: {
+            id: 0,
+            detailId: '',
+            applicationName: '',
+            respondentName: '',
+            status: 0,
+            mediateName: '',
+            contactName: '',
+            createTime: '',
+            createTime1: '',
+            createTime2: '',
+            detail:'',
+        },
       dateValue: '',
       currentPage: 1,
       popUpsState: false
     }
   },
+    created () {
+        this.getDataList()
+    },
   methods: {
+      // 获取数据列表
+      getDataList () {
+          alert("===="+this.$route.params.id)
+          this.$http({
+              url: this.$http.adornUrl('/api/application/dispute/one'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'id': this.$route.params.id,
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.dataForm = data.data
+              }
+          })
+      },
     onItemFn (index) {
       this.currentIndex = index
     },

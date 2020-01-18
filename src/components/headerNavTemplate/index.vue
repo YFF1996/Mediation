@@ -79,7 +79,7 @@ export default {
     onSkipPageFn (path) {
       this.$router.push(path)
     },
-    onReturnLoginFn () {
+    onReturnLoginFn (){
       window.localStorage.removeItem('setLsLoginState')
       this.setLsLoginState(false)
     }

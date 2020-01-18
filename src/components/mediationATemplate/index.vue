@@ -130,6 +130,7 @@
           this.$message.error("请先登录")
           return
         }
+
         this.$http({
           url: this.$http.adornUrl('/api/application/save'),
           method: 'post',
@@ -146,7 +147,7 @@
           })
         }).then(({data}) => {
           if (data && data.code == 200) {
-            this.$cookie.set("username",data.data.username);
+              window.localStorage.setItem("applicationId",data.data.applicationId)
             this.$emit('nextChild', 1)
 
           } else {

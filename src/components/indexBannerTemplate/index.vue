@@ -49,7 +49,7 @@
               </li>
             </ul>
           </div>
-          <div class="submit-btn">提交纠纷</div>
+          <div class="submit-btn" @click="submit()">提交纠纷</div>
         </div>
       </div>
     </div>
@@ -60,7 +60,12 @@
   export default {
     data() {
       return {}
-    }
+    },
+      methods: {
+          submit(){
+              this.$router.push('/online_mediation');
+          },
+      },
   }
 </script>
 

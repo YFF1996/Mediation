@@ -8,10 +8,10 @@
         <div class="top-nav-wrapper">
           <ul v-if="navList.length">
             <li
-              v-for="(item, index) in navList"
-              :class="{'active' : currentIndex === index}"
-              @click="onItemFn(index)"
-              :key="index"
+                    v-for="(item, index) in navList"
+                    :class="{'active' : currentIndex === index}"
+                    @click="onItemFn(index)"
+                    :key="index"
             >
               {{ item.title }}
               <div class="line"></div>
@@ -22,68 +22,87 @@
           <p>时间：</p>
           <div class="date-box">
             <el-date-picker
-              v-model="dateValue"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
+                    v-model="dateValue"
+                    type="daterange"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div class="btn">查询</div>
         </div>
-        <div class="table-wrapper">
-          <div class="table-top">
-            <div class="item serial-number">排序</div>
-            <div class="item">纠纷概括</div>
-            <div class="item">申请时间</div>
-            <div class="item">办理阶段</div>
-            <div class="item">操作</div>
-          </div>
-          <ul>
-            <li>
-              <div class="item serial-number">1</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item">未受理</div>
-              <div class="item item-text">
-                <p class="active">编辑</p>
-                <div class="line"></div>
-                <p>取消申请</p>
-              </div>
-            </li>
-            <li>
-              <div class="item serial-number">2</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item item-active">已受理</div>
-              <div class="item item-text">
-                <p class="active" @click="onSkipPageFn('/my_dispute_details')">查看</p>
-                <div class="line"></div>
-                <p>取消申请</p>
-              </div>
-            </li>
-            <li>
-              <div class="item serial-number">3</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item">未受理</div>
-              <div class="item item-text">
-                <p class="active">编辑</p>
-                <div class="line"></div>
-                <p>咨询调解员</p>
-              </div>
-            </li>
-          </ul>
+        <div>
+          <el-table
+                  :data="dataList"
+                  border
+                  v-loading="dataListLoading"
+                  style="width: 100%;">
+            <el-table-column
+                    type="selection"
+                    header-align="center"
+                    align="center"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    header-align="center"
+                    align="center"
+                    prop="id"
+                    width="80"
+                    label="序号">
+            </el-table-column>
+            <el-table-column
+                    prop="detail"
+                    header-align="center"
+                    align="center"
+                    label="纠纷概括">
+            </el-table-column>
+            <el-table-column
+                    prop="content"
+                    header-align="center"
+                    align="center"
+                    label="申诉内容">
+            </el-table-column>
+            <el-table-column
+                    prop="createTime"
+                    header-align="center"
+                    align="center"
+                    label="申请时间">
+            </el-table-column>
+            <el-table-column
+                    prop="status"
+                    header-align="center"
+                    align="center"
+                    label="办理阶段">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status ==1">待受理</span>
+                <span v-if="scope.row.status ==2">已受理</span>
+                <span v-if="scope.row.status ==3">终结</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    header-align="center"
+                    align="center"
+                    width="150"
+                    label="操作">
+              <template slot-scope="scope">
+                <el-button  type="text"  size="small" @click="onSkipPageFn(scope.row.id)">查看</el-button>
+                <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <div class="pagination-wrapper">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40, 50]"
-            :page-size="100"
-            layout="total, prev, pager, next, sizes, jumper"
-            :total="50">
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[10, 20, 30, 40, 50]"
+                  :page-size="100"
+                  layout="total, prev, pager, next, sizes, jumper"
+                  :total="50">
           </el-pagination>
         </div>
       </div>
@@ -93,51 +112,80 @@
 </template>
 
 <script>
-import HeaderNav from '@/components/headerNavTemplate'
-import TitleBox from '@/components/titleBoxTemplate'
-import MyNav from '@/components/myNavTemplate'
-import FooterTempate from '@/components/footerTemplate'
+    import HeaderNav from '@/components/headerNavTemplate'
+    import TitleBox from '@/components/titleBoxTemplate'
+    import MyNav from '@/components/myNavTemplate'
+    import FooterTempate from '@/components/footerTemplate'
 
-export default {
-  data() {
-    return {
-      currentIndex: 0,
-      navList: [
-        {
-          title: '全部案例'
+    export default {
+        data() {
+            return {
+                currentIndex: 0,
+                dataListLoading: false,
+                navList: [
+                    {
+                        title: '全部案例'
+                    },
+                    {
+                        title: '待受理案例'
+                    },
+                    {
+                        title: '已受理案例'
+                    }
+                ],
+                dataList:[],
+                dateValue: [],
+                currentPage: 1
+            }
         },
-        {
-          title: '待受理案例'
+        created () {
+            this.getDataList()
         },
-        {
-          title: '已受理案例'
+        methods: {
+            // 获取数据列表
+            getDataList () {
+                this.$http({
+                    url: this.$http.adornUrl('/api/application/dispute/list'),
+                    method: 'get',
+                    params: this.$http.adornParams({
+                        'page': this.pageIndex,
+                        'pagesize': this.pageSize,
+                        'status':this.currendIndex,
+                        'startTime':this.dateValue[0],
+                        'endTime':this.dateValue[1],
+                    })
+                }).then(({data}) => {
+                    if (data && data.code == 200) {
+                        this.dataList = data.data.list
+                        this.totalPage = data.data.totalCount
+                    } else {
+                        this.dataList = []
+                        this.totalPage = 0
+                    }
+                })
+            },
+            onItemFn (index) {
+                this.currentIndex = index
+                this.getDataList()
+            },
+            onSkipPageFn (val) {
+                console.log(val)
+                this.$router.push({name:'myDisputeDetails', params:{id:val}});
+            },
+            handleSizeChange (val) {
+                window.console.log(`每页 ${val} 条`)
+            },
+            handleCurrentChange (val) {
+                window.console.log(`当前页: ${val}`)
+            }
+        },
+        components: {
+            HeaderNav,
+            TitleBox,
+            MyNav,
+            FooterTempate
         }
-      ],
-      dateValue: '',
-      currentPage: 1
     }
-  },
-  methods: {
-    onItemFn (index) {
-      this.currentIndex = index
-    },
-    onSkipPageFn (path) {
-      this.$router.push(path)
-    },
-    handleSizeChange (val) {
-      window.console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange (val) {
-      window.console.log(`当前页: ${val}`)
-    }
-  },
-  components: {
-    HeaderNav,
-    TitleBox,
-    MyNav,
-    FooterTempate
-  }
-}
 </script>
 
 <style lang="stylus" scoped>
