@@ -65,6 +65,22 @@
                     label="申诉内容">
             </el-table-column>
             <el-table-column
+                    prop="type"
+                    header-align="center"
+                    align="center"
+                    label="处理方式">
+              <template slot-scope="scope">
+                <span v-if="scope.row.type ==1">线上处理</span>
+                <span v-if="scope.row.type ==2">线下处理</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+                    prop="remark"
+                    header-align="center"
+                    align="center"
+                    label="备注">
+            </el-table-column>
+            <el-table-column
                     prop="createTime"
                     header-align="center"
                     align="center"
@@ -153,6 +169,7 @@
                         'status':this.currendIndex,
                         'startTime':this.dateValue[0],
                         'endTime':this.dateValue[1],
+                      'username':this.$cookie.get("username")
                     })
                 }).then(({data}) => {
                     if (data && data.code == 200) {
