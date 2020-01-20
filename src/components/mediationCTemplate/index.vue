@@ -8,7 +8,7 @@
         </div>
         <div class="radio-box">
           <el-radio-group v-model="typeRadio">
-            <el-radio   v-for="param in params" :key="param.paramId" :label="param.id">{{ param.paramKey }}</el-radio >
+            <el-radio   v-for="param in params" :key="param.paramId" :label="param.paramId">{{ param.paramKey }}</el-radio >
           </el-radio-group>
         </div>
       </li>
