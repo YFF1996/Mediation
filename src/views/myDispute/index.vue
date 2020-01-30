@@ -30,7 +30,7 @@
                     end-placeholder="结束日期">
             </el-date-picker>
           </div>
-          <div class="btn">查询</div>
+          <div class="btn" @click="getDataList()">查询</div>
         </div>
         <div>
           <el-table
@@ -94,7 +94,9 @@
               <template slot-scope="scope">
                 <span v-if="scope.row.status ==1">待受理</span>
                 <span v-if="scope.row.status ==2">已受理</span>
-                <span v-if="scope.row.status ==3">终结</span>
+                <span v-if="scope.row.status ==3">成功</span>
+                <span v-if="scope.row.status ==4">驳回</span>
+                <span v-if="scope.row.status ==5">失败</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -105,7 +107,7 @@
                     label="操作">
               <template slot-scope="scope">
                 <el-button  type="text"  size="small" @click="onSkipPageFn(scope.row.id)">查看</el-button>
-                <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+                <el-button type="text" size="small" v-if="scope.row.status ==4||scope.row.status ==1" @click="deleteHandle(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -160,15 +162,16 @@
         methods: {
             // 获取数据列表
             getDataList () {
+                alert("=="+this.currentIndex)
                 this.$http({
                     url: this.$http.adornUrl('/api/application/dispute/list'),
                     method: 'get',
                     params: this.$http.adornParams({
                         'page': this.pageIndex,
                         'pagesize': this.pageSize,
-                        'status':this.currendIndex,
                         'startTime':this.dateValue[0],
                         'endTime':this.dateValue[1],
+                        'status':this.currentIndex,
                       'username':this.$cookie.get("username")
                     })
                 }).then(({data}) => {
@@ -186,7 +189,6 @@
                 this.getDataList()
             },
             onSkipPageFn (val) {
-                console.log(val)
                 this.$router.push({name:'myDisputeDetails', params:{id:val}});
             },
             handleSizeChange (val) {

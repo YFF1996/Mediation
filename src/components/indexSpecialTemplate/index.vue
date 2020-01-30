@@ -7,7 +7,7 @@
           <h2>纠纷专题</h2>
           <img src="../../common/img/index-title-right.png" />
         </div>
-        <p>说明说明说明说明</p>
+        <p>详细说明</p>
       </div>
       <ul>
         <li>
@@ -19,7 +19,8 @@
           </div>
           <h3>婚姻家庭</h3>
           <div class="btn-box">
-            <router-link to="/registered" v-if="realname == null">申请</router-link>
+            <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
+            <router-link to="/registered" v-if="realname == null">立即申请</router-link>
           </div>
         </li>
         <li>
@@ -31,7 +32,8 @@
           </div>
           <h3>道路纠纷</h3>
           <div class="btn-box">
-            <router-link to="/registered" v-if="realname == null">申请</router-link>
+            <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
+            <router-link to="/registered" v-if="realname == null">立即申请</router-link>
           </div>
         </li>
         <li>
@@ -43,7 +45,8 @@
           </div>
           <h3>物业纠纷</h3>
           <div class="btn-box">
-            <router-link to="/registered" v-if="realname == null">申请</router-link>
+            <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
+            <router-link to="/registered" v-if="realname == null">立即申请</router-link>
           </div>
         </li>
         <li>
@@ -55,7 +58,8 @@
           </div>
           <h3>劳动纠纷</h3>
           <div class="btn-box">
-            <router-link to="/registered" v-if="realname == null">申请</router-link>
+            <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
+            <router-link to="/registered" v-if="realname == null">立即申请</router-link>
           </div>
         </li>
         <li>
@@ -67,7 +71,8 @@
           </div>
           <h3>医疗纠纷</h3>
           <div class="btn-box" >
-            <router-link to="/registered" v-if="realname == null">申请</router-link>
+            <router-link to="/online_mediation" v-if="realname != null">立即申请</router-link>
+            <router-link to="/registered" v-if="realname == null">立即申请</router-link>
           </div>
         </li>
       </ul>
@@ -80,6 +85,13 @@
     data() {
       return {}
     },
+      computed: {
+          realname: {
+              get() {
+                  return window.sessionStorage.getItem('realname')
+              }
+          },
+      },
       method:{
           submit(){
               this.$router.push('/online_mediation');

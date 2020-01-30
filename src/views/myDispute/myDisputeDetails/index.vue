@@ -33,12 +33,12 @@
                     <h3>{{dataForm.createTime}}</h3>
                     <div class="status">
                       <img src="../../../common/img/green-complete-icon.png" />
-                      <span>已确认</span>
+                      <span v-if="dataForm.status == 2">已确认</span>
                     </div>
                   </div>
                   <div class="text">
-                    <p>联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
-                    <div class="btn" @click="onShowHideFn(true)">查看</div>
+                    <p v-if="dataForm.status == 2">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
+                    <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
               </li>
@@ -52,8 +52,8 @@
                     <h3>{{dataForm.createTime1}}</h3>
                   </div>
                   <div class="text">
-                    <p>调解员{{dataForm.mediateName}}已确认受理。</p>
-                    <div class="btn" @click="onShowHideFn(true)">查看</div>
+                    <p v-if="dataForm.status == 2">调解员{{dataForm.mediateName}}已确认受理。</p>
+                    <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
               </li>
@@ -67,13 +67,13 @@
                     <h3>{{dataForm.createTime2}}</h3>
                   </div>
                   <div class="text">
-                    <p>联络员{{dataForm.mediateName}}已结案</p>
+                    <p v-if="dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.mediateName}}已结案</p>
                   </div>
                 </div>
               </li>
             </ul>
           </div>
-          <div class="more-box">点击查看更多进度详情↓</div>
+          <!--<div class="more-box">点击查看更多进度详情↓</div>-->
         </div>
         <div class="top-nav-wrapper">
           <ul v-if="navList.length">
@@ -89,38 +89,49 @@
           </ul>
         </div>
         <div class="table-wrapper">
-          <div class="table-top">
-            <div class="item serial-number">排序</div>
-            <div class="item">证据名称</div>
-            <div class="item">上传时间</div>
-            <div class="item item-operating">操作</div>
-          </div>
-          <ul>
-            <li>
-              <div class="item serial-number">1</div>
-              <div class="item">文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item item-text">
-                <p class="active">下载</p>
-              </div>
-            </li>
-            <li>
-              <div class="item serial-number">2</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item item-text">
-                <p class="active">下载</p>
-              </div>
-            </li>
-            <li>
-              <div class="item serial-number">3</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">2019-12-12</div>
-              <div class="item item-text">
-                <p class="active">下载</p>
-              </div>
-            </li>
-          </ul>
+          <el-table
+                  :data="dataList"
+                  border
+                  v-loading="dataListLoading"
+                  @selection-change="selectionChangeHandle"
+                  style="width: 100%;">
+            <el-table-column
+                    type="selection"
+                    header-align="center"
+                    align="center"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    header-align="center"
+                    align="center"
+                    prop="id"
+                    width="80"
+                    label="序号">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    header-align="center"
+                    align="center"
+                    label="证据名称">
+            </el-table-column>
+            <el-table-column
+                    prop="createTime"
+                    header-align="center"
+                    align="center"
+                    label="上传时间">
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    header-align="center"
+                    align="center"
+                    width="150"
+                    label="操作">
+              <template slot-scope="scope">
+                <el-button  type="text"  size="small" @click="click(scope.row.path)">下载</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <div class="pagination-wrapper">
           <el-pagination
@@ -144,15 +155,15 @@
         <div class="content">
           <div class="item">
             <h4>时间：</h4>
-            <p>2019-11-11 09:25:05</p>
+            <p>{{dataForm.createTime}}</p>
           </div>
           <div class="item">
             <h4>调解内容：</h4>
-            <p>调解协议，调解协议，调解协议，调解协议，调解协议，调解协议，调解协议，调解协议，调解协议，调解协议。</p>
+            <p>{{dataForm.detail}}</p>
           </div>
           <div class="item">
             <h4>附件：</h4>
-            <p>证据名称文档.doc<a href="#">下载</a></p>
+            <p>{{dataForm.path}}<el-button  type="text"  size="small" @click="click(dataForm.path)">下载</el-button></p>
           </div>
           <div class="btn-wrapper">
             <div class="btn" @click="onShowHideFn(false)">确定</div>
@@ -174,6 +185,8 @@ export default {
   data() {
     return {
       currentIndex: 0,
+        dataList:[],
+        dataListLoading:false,
       navList: [
         {
           title: '证件列表'
@@ -196,6 +209,7 @@ export default {
             createTime: '',
             createTime1: '',
             createTime2: '',
+            path:'',
             detail:'',
         },
       dateValue: '',
@@ -207,9 +221,36 @@ export default {
         this.getDataList()
     },
   methods: {
+      click(val){
+          let m =val.lastIndexOf("/");
+          let obj  = val.substring(m+1,val.length);
+          this.$http({
+              url: this.$http.adornUrl('/sys/download'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'url': val
+              }),
+              responseType: 'arraybuffer'
+          }).then(({data}) => {
+              let blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'})
+              let objectUrl = URL.createObjectURL(blob)
+              let link = document.createElement('a')
+              link.href = objectUrl
+              link.download = obj
+
+              // 此写法兼容火狐浏览器
+              document.body.appendChild(link)
+
+              let evt = document.createEvent('MouseEvents')
+              evt.initEvent('click', false, false)
+              link.dispatchEvent(evt)
+
+              window.URL.revokeObjectURL(objectUrl)
+              this.dataListLoading = false
+          })
+      },
       // 获取数据列表
       getDataList () {
-          alert("===="+this.$route.params.id)
           this.$http({
               url: this.$http.adornUrl('/api/application/dispute/one'),
               method: 'get',
@@ -219,11 +260,36 @@ export default {
           }).then(({data}) => {
               if (data && data.code == 200) {
                   this.dataForm = data.data
+                  this.getUploadList(1)
               }
+          })
+      },
+      // 获取数据列表
+      getUploadList (val) {
+          this.dataListLoading = true
+          this.$http({
+              url: this.$http.adornUrl('/api/file/dispute/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'page': this.pageIndex,
+                  'pagesize': this.pageSize,
+                  'detailId':this.dataForm.detailId,
+                  'type': val,
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.dataList = data.data.list
+                  this.totalPage = data.data.totalCount
+              } else {
+                  this.dataList = []
+                  this.totalPage = 0
+              }
+              this.dataListLoading = false
           })
       },
     onItemFn (index) {
       this.currentIndex = index
+        this.getUploadList(index+1);
     },
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)

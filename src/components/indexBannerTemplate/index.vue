@@ -11,19 +11,19 @@
             <ul>
               <li>
                 <div class="bg"></div>
-                <h5>1</h5>
+                <h5>{{qian}}</h5>
               </li>
               <li>
                 <div class="bg"></div>
-                <h5>2</h5>
+                <h5>{{bai}}</h5>
               </li>
               <li>
                 <div class="bg"></div>
-                <h5>3</h5>
+                <h5>{{shi}}</h5>
               </li>
               <li>
                 <div class="bg"></div>
-                <h5>4</h5>
+                <h5>{{ge}}</h5>
               </li>
             </ul>
           </div>
@@ -34,7 +34,7 @@
                   <img src="../../common/img/dispute-icon-tj.png" />
                 </div>
                 <div class="dispute-text">
-                  <h3>92%</h3>
+                  <h3>{{rate}}%</h3>
                   <h4>调解成功率</h4>
                 </div>
               </li>
@@ -43,7 +43,7 @@
                   <img src="../../common/img/dispute-icon-me.png" />
                 </div>
                 <div class="dispute-text">
-                  <h3>4321</h3>
+                  <h3>{{sum}}</h3>
                   <h4>调解成功率</h4>
                 </div>
               </li>
@@ -59,11 +59,43 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+          qian:'',
+          bai:'',
+          shi:'',
+          ge:'',
+          rate:'',
+          sum:'',
+      }
     },
+      created () {
+          this.getDataList()
+      },
       methods: {
           submit(){
               this.$router.push('/online_mediation');
+          },
+          getDataList () {
+              this.dataListLoading = true
+              this.$http({
+                  url: this.$http.adornUrl('/api/application/dispute/count'),
+                  method: 'get',
+                  params: this.$http.adornParams({
+                  })
+              }).then(({data}) => {
+                  if (data && data.code == 200) {
+                      this.qian = (data.data.done/1000)%10;
+                      this.bai = (data.data.done/100)%10;
+                      this.shi = (data.data.done/10)%10;
+                      this.ge = (data.data.done/1)%10;
+                      this.rate=data.data.rate *100;
+                      this.sum=data.data.sum;
+                  } else {
+                      this.dataList = []
+                      this.totalPage = 0
+                  }
+                  this.dataListLoading = false
+              })
           },
       },
   }

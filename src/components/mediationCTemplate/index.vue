@@ -86,7 +86,8 @@ export default {
             courtId: '选项1',
             courtName: '黄金糕'
         }],
-        category:{ status:''},
+        category:{ status:'',
+        type:''},
         params: [{
             paramId: '0',
             paramKey: '默认父级'
@@ -174,7 +175,8 @@ export default {
         },
       // 上传之前
       beforeUploadHandle1 () {
-          this.category.status = '2'
+          this.category.status = '4'
+          this.category.type = '1'
       },
       handleAvatarSuccessA (response) {
           if (response && response.code == 200) {
