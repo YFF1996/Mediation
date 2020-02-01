@@ -56,7 +56,7 @@
         <div class="update-wrapper">
           <el-upload
             drag
-            action="http://192.168.0.101:8082/hc-online/api/upload/card"
+            action="http://192.168.1.101:8082/hc-online/api/upload/card"
             multiple
             :on-success="handleAvatarSuccessA"
             :data="category"

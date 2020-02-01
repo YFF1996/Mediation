@@ -18,13 +18,13 @@
     </ul>
     <div class="pagination-wrapper">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40, 50]"
-        :page-size="100"
-        layout="total, prev, pager, next, sizes, jumper"
-        :total="50">
+              @size-change="sizeChangeHandle"
+              @current-change="currentChangeHandle"
+              :current-page="pageIndex"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              :total="totalPage"
+              layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </div>
   </div>
@@ -34,22 +34,22 @@
 export default {
   data() {
     return {
-      currentPage: 1,
-      pageSize:10
+        pageIndex: 1,
+        pageSize: 10,
     }
   },
   methods: {
     onSkipPageFn (path) {
       this.$router.push(path)
     },
-    handleSizeChange (val) {
+      sizeChangeHandle (val) {
       window.console.log(`每页 ${val} 条`)
       this.pageSize = val
 
     },
-    handleCurrentChange (val) {
+      currentChangeHandle (val) {
       window.console.log(`当前页: ${val}`)
-      this.currentPage = val
+      this.pageIndex = val
       this.getDataList();
     },
     // 获取数据列表
@@ -58,21 +58,20 @@ export default {
         url: this.$http.adornUrl('/api/news/list'),
         method: 'get',
         params: this.$http.adornParams({
-          'page': this.currentPage,
+          'page': this.pageIndex,
           'pagesize': this.pageSize,
         })
       }).then(({data}) => {
         if (data && data.code == 200) {
           this.lists = data.data.list
-          this.totalPage = data.data.totalCount
+            this.totalPage = data.data.totalCount
         } else {
           this.dataList = []
-          this.totalPage = 0
         }
       })
     },
   },
-  props: ['lists']
+    props: ['lists','totalPage'],
 }
 </script>
 

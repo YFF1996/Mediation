@@ -6,20 +6,17 @@
       <div class="left-nav-wrapper">
         <ul>
           <li
-                  @click="onNavItemFn(0)"
-          >全部</li>
-          <li
             v-for="(item, index) in navLists"
             :class="{'active' : currendIndex === index}"
             :key="index"
             @click="onNavItemFn(index)"
-          >{{ item.title }}</li>
+          >{{ item.paramValue}}</li>
         </ul>
       </div>
       <div class="related-right">
         <div class="select-wrapper">
           <p>关键词：</p>
-          <input type="text" v-model="key" placeholder="请输入关键词">
+          <input type="text" v-model="key" placeholder="请输入相关内容">
           <p>时间：</p>
           <div class="date-box">
             <el-date-picker
@@ -35,7 +32,7 @@
             <div class="btn btn-active" @click="search()">搜索</div>
           </div>
         </div>
-        <related-cases-list :lists="lists" />
+        <related-cases-list :lists="lists" :totalPage="totalPage" />
       </div>
     </div>
     <footer-tempate :footerState="true" />
@@ -57,24 +54,32 @@ export default {
         key:'',
       navLists: [
         {
-            paramsKey: '全部'
+            paramValue: '全部',
+            paramId: '全部'
         },
         {
-            paramsKey: '婚姻家庭'
+            paramValue: '婚姻家庭',
+            paramId: '全部'
         },
         {
-            paramsKey: '道路纠纷'
+            paramValue: '道路纠纷',
+            paramId: '全部'
         },
         {
-            paramsKey: '物业纠纷'
+            paramValue: '物业纠纷',
+            paramId: '全部'
         },
         {
-            paramsKey: '劳动纠纷'
+            paramValue: '劳动纠纷',
+            paramId: '全部'
         },
         {
-            paramsKey: '医疗纠纷'
+            paramValue: '医疗纠纷',
+            paramId: '全部'
         }
       ],
+        totalPage:0,
+        paramId:'',
       lists: [
         {
             content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
@@ -105,6 +110,7 @@ export default {
     }
   },
     created () {
+        this.getConfigList()
         this.getDataList()
     },
   methods: {
@@ -112,8 +118,30 @@ export default {
          this.getDataList ()
       },
     onNavItemFn (index) {
-      this.currendIndex = index
+        this.currendIndex = index
+        this.paramId =  this.navLists[index].paramId
+        this.getDataList()
     },
+      //相关案例分类
+      getConfigList(){
+          this.$http({
+              url: this.$http.adornUrl('/sys/config/parent/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'type': '2',
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  console.log(data.data)
+                  this.navLists = data.data
+                  var obj = {
+                      paramValue: '全部',
+                      paramId: '0'
+                  }
+                  this.navLists.splice(0,0,obj)
+              }
+          })
+      },
 // 获取数据列表
 getDataList () {
     this.$http({
@@ -124,13 +152,14 @@ getDataList () {
             'pagesize': this.pageSize,
             'startTime':this.dateValue[0],
             'endTime':this.dateValue[1],
+            'paramId':this.paramId,
             'key':this.key
         })
     }).then(({data}) => {
         if (data && data.code == 200) {
-            this.navLists = data.data.list
             this.lists = data.data.list
             this.totalPage = data.data.totalCount
+            alert("=="+this.totalPage)
         } else {
             this.dataList = []
             this.totalPage = 0

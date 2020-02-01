@@ -14,15 +14,15 @@
       </li>
     </ul>
     <div class="pagination-wrapper">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40, 50]"
-        :page-size="100"
-        layout="total, prev, pager, next, sizes, jumper"
-        :total="50">
-      </el-pagination>
+    <el-pagination
+            @size-change="sizeChangeHandle"
+            @current-change="currentChangeHandle"
+            :current-page="pageIndex"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pageSize"
+            :total="totalPage"
+            layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
     </div>
   </div>
 </template>
@@ -31,22 +31,22 @@
 export default {
   data() {
     return {
-      currentPage: 0,
-        currentLists:this.lists
+        pageIndex: 1,
+        pageSize: 10,
     }
   },
   methods: {
     onSkipPageFn () {
       this.$router.push('/related_cases_details')
     },
-      handleSizeChange (val) {
+      sizeChangeHandle (val) {
           window.console.log(`每页 ${val} 条`)
           this.pageSize = val
 
       },
-      handleCurrentChange (val) {
+      currentChangeHandle (val) {
           window.console.log(`当前页: ${val}`)
-          this.currentPage = val
+          this.pageIndex = val
           this.getDataList();
       },
       // 获取数据列表
@@ -55,7 +55,7 @@ export default {
               url: this.$http.adornUrl('/api/case/list'),
               method: 'get',
               params: this.$http.adornParams({
-                  'page': this.currentPage,
+                  'page': this.pageIndex,
                   'pagesize': this.pageSize,
               })
           }).then(({data}) => {
@@ -69,7 +69,7 @@ export default {
           })
       },
   },
-  props: ['lists']
+    props: ['lists','totalPage'],
 }
 </script>
 

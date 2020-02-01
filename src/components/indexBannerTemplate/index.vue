@@ -43,7 +43,7 @@
                   <img src="../../common/img/dispute-icon-me.png" />
                 </div>
                 <div class="dispute-text">
-                  <h3>{{sum}}</h3>
+                  <h3>{{success}}</h3>
                   <h4>调解成功率</h4>
                 </div>
               </li>
@@ -65,7 +65,7 @@
           shi:'',
           ge:'',
           rate:'',
-          sum:'',
+          success:'',
       }
     },
       created () {
@@ -89,7 +89,7 @@
                       this.shi = (data.data.done/10)%10;
                       this.ge = (data.data.done/1)%10;
                       this.rate=data.data.rate *100;
-                      this.sum=data.data.sum;
+                     this.success=data.data.success.length;
                   } else {
                       this.dataList = []
                       this.totalPage = 0

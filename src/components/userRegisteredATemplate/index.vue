@@ -144,9 +144,7 @@ export default {
             })
         }).then(({data}) => {
             if (data && data.code == 200) {
-              alert(data.data.username)
               this.$cookie.set("username",data.data.username);
-              alert(this.$cookie.get("username"))
                 this.$emit('createNextChild', 1)
 
             } else {

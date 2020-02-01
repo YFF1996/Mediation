@@ -121,10 +121,14 @@ export default {
       }).then(({data}) => {
         if (data && data.code == 200) {
           this.$cookie.set('token', data.data.token)
+            this.$cookie.set('userId', data.data.userId)
           this.$cookie.set('username', data.data.username)
           this.$cookie.set('realname', data.data.realname)
           window.localStorage.setItem('setLsLoginState', true)
           window.sessionStorage.setItem('realname',data.data.realname)
+            window.sessionStorage.setItem('sign',data.data.sign)
+            window.sessionStorage.setItem('email',data.data.email)
+            window.sessionStorage.setItem('status',data.data.status)
           this.setLsLoginState(true)
             this.onSkipPage('/')
         } else {

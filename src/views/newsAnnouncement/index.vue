@@ -6,9 +6,6 @@
       <div class="left-nav-wrapper">
         <ul>
           <li
-                  @click="onNavItemFn(0)"
-          >全部</li>
-          <li
             v-for="(item, index) in navLists"
             :class="{'active' : currendIndex === index}"
             :key="index"
@@ -16,7 +13,7 @@
           >{{ item.paramValue }}</li>
         </ul>
       </div>
-      <news-list :lists="lists" />
+      <news-list :lists="lists" :totalPage="totalPage"/>
     </div>
     <footer-tempate :footerState="true" />
   </div>
@@ -35,18 +32,24 @@ export default {
       currendIndex: 0,
       navLists: [
         {
-          paramValue: '全部'
+          paramValue: '全部',
+            paramId: '全部'
         },
         {
-          paramValue: '新闻栏目A'
+          paramValue: '新闻栏目A',
+            paramId: '全部'
         },
         {
-          paramValue: '新闻栏目B'
+          paramValue: '新闻栏目B',
+            paramId: '全部'
         },
         {
-          paramValue: '新闻栏目C'
+          paramValue: '新闻栏目C',
+            paramId: '全部'
         }
       ],
+        paramId:'',
+        totalPage:0,
       lists: [
         {
           urlPic: UrlPic,
@@ -83,11 +86,36 @@ export default {
   },
   created () {
     this.getDataList()
+      this.getConfigList()
   },
   methods: {
     onNavItemFn (index) {
       this.currendIndex = index
+       this.paramId =  this.navLists[index].paramId
+        this.getDataList()
     },
+      //新闻分类
+      getConfigList(){
+          this.$http({
+              url: this.$http.adornUrl('/sys/config/parent/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'type': '1',
+              })
+          }).then(({data}) => {
+
+              if (data && data.code == 200) {
+                  this.navLists = data.data
+                  var obj = {
+                      paramValue: '全部',
+                      paramId: '0'
+                  }
+                  this.navLists.splice(0,0,obj)
+                  console.log(this.navLists)
+
+              }
+          })
+      },
     // 获取数据列表
     getDataList () {
       this.$http({
@@ -96,11 +124,11 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'pagesize': this.pageSize,
+            'paramId':this.paramId
         })
       }).then(({data}) => {
         if (data && data.code == 200) {
-          this.navLists = data.data.list
-          this.lists = data.data.list
+         this.lists = data.data.list
           this.totalPage = data.data.totalCount
         } else {
           this.dataList = []

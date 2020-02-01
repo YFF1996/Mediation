@@ -11,14 +11,17 @@
             <div class="avatar">
               <img v-if="imageUrl" :src="imageUrl" class="avatar-img">
               <div class="edit-icon">
-                <el-upload
-                  class="avatar-uploader"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
-                >
-                </el-upload>
-                <img src="../../common/img/edit-avatar-icon.png" />
+                  <el-upload
+                          class="avatar-uploader"
+                          drag
+                          action="http://192.168.1.101:8082/hc-online/api/file/portrait/upload"
+                          :show-file-list="false"
+                          :data="category"
+                          :on-success="handleAvatarSuccessA"
+                          :before-upload="beforeUploadHandle1"
+                          >
+                  </el-upload>
+                <img  src="../../common/img/edit-avatar-icon.png" />
               </div>
             </div>
           </div>
@@ -31,7 +34,7 @@
               <h3>申请人姓名</h3>
             </div>
             <div class="input-box">
-              <input class="input-240" type="text" placeholder="请输入你的姓名" />
+              <input class="input-240" v-model="dataForm.realname" type="text" placeholder="请输入你的姓名" />
             </div>
           </li>
           <li>
@@ -40,7 +43,7 @@
               <h3>申请人性别</h3>
             </div>
             <div class="radio-box">
-              <el-radio-group v-model="sexTypeRadio">
+              <el-radio-group v-model="dataForm.sex">
                 <el-radio :label="0">男</el-radio>
                 <el-radio :label="1">女</el-radio>
                 <el-radio :label="2">其他</el-radio>
@@ -55,7 +58,8 @@
             <div class="input-box">
               <div class="date-box">
                 <el-date-picker
-                  v-model="dateValue"
+                  v-model="dataForm.birthday"
+                  value-format="yyyy-MM-dd"
                   type="date"
                   placeholder="选择日期">
                 </el-date-picker>
@@ -68,7 +72,7 @@
               <h3>身份证号码</h3>
             </div>
             <div class="input-box">
-              <input class="input-240" type="number" />
+              <input class="input-240" v-model="dataForm.username" type="number" />
             </div>
           </li>
           <li>
@@ -76,56 +80,27 @@
               <p>*</p>
               <h3>现居地址</h3>
             </div>
-            <div class="input-box">
-              <div class="select-box">
-                <el-select v-model="areaVal" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in areas"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+            <div class="input-box" style="float: left;">
+              <div class="name" >
+                <p></p>
+                <h3>省</h3>
               </div>
-              <div class="select-box">
-                <el-select v-model="areaVal" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in areas"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <div class="input-box">
+                <input class="input-140" v-model="dataForm.provinces" type="text" />
               </div>
-              <div class="select-box">
-                <el-select v-model="areaVal" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in areas"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <div class="name">
+                <p></p>
+                <h3>市/县城/区</h3>
               </div>
-              <div class="select-box">
-                <el-select v-model="areaVal" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in areas"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <div class="input-box">
+                <input class="input-140" v-model="dataForm.city" type="text" />
               </div>
-              <div class="select-box">
-                <el-select v-model="areaVal" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in areas"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <div class="name">
+                <p></p>
+                <h3>乡/镇</h3>
+              </div>
+              <div class="input-box">
+                <input class="input-140" v-model="dataForm.area" type="text" />
               </div>
             </div>
           </li>
@@ -135,7 +110,7 @@
               <h3>详细地址</h3>
             </div>
             <div class="input-box">
-              <input class="input-440" type="text" />
+              <input class="input-440" v-model="dataForm.address" type="text" />
             </div>
           </li>
           <li>
@@ -144,7 +119,7 @@
               <h3>户籍地址</h3>
             </div>
             <div class="input-box">
-              <input class="input-440" type="text" />
+              <input class="input-440" v-model="dataForm.householdCity" type="text" />
             </div>
           </li>
           <li>
@@ -163,13 +138,13 @@
                   </el-option>
                 </el-select>
               </div>
-              <input class="input-240" type="text" placeholder="请输入你的证件号">
+              <input class="input-240"  type="text" placeholder="请输入你的证件号">
             </div>
           </li>
         </ul>
         <div class="submit-wrapper">
           <div class="btn">保存</div>
-          <div class="btn btn-active">保存</div>
+          <div class="btn btn-active" @click="submit()">保存</div>
         </div>
       </div>
     </div>
@@ -183,11 +158,17 @@ import TitleBox from '@/components/titleBoxTemplate'
 import MyNav from '@/components/myNavTemplate'
 import FooterTempate from '@/components/footerTemplate'
 
+
 export default {
   data() {
     return {
-      imageUrl: '',
+        remark:'',
+      imageUrl: null,
       sexTypeRadio: 0,
+        category:{
+            userId:0,
+            username:'',
+        },
       areas: [{
         value: '北京市',
         label: '北京市'
@@ -197,14 +178,70 @@ export default {
         value: '身份证',
         label: '身份证'
       }],
+        dataForm: {
+            realname: '',
+            headPortrait: '',
+            sex: '',
+            birthday: '',
+            provinces:'',
+            householdCity:'',
+            city: '',
+            area:'',
+            username:'',
+            address: ''
+        },
       value: '',
       dateValue: ''
     }
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
-    }
+   submit() {
+       let userId = this.$cookie.get("userId");
+       if (userId == null) {
+           this.$message.error("登录超时，请重新登录");
+           return;
+       } else {
+           this.$http({
+               url: this.$http.adornUrl('/api/user/update/info'),
+               method: 'post',
+               data: this.$http.adornData({
+                   'realName': this.dataForm.accountVal,
+                   'headPortrait': this.dataForm.headPortrait,
+                   'sex': this.dataForm.sex,
+                   'birthday': this.dataForm.birthday,
+                   'provinces': this.dataForm.provinces,
+                   'householdCity': this.dataForm.householdCity,
+                   'city': this.dataForm.city,
+                   'area': this.dataForm.area,
+                   'userId': userId,
+                   'username': this.dataForm.username,
+                   'address': this.dataForm.address,
+               })
+           }).then(({data}) => {
+               if (data && data.code == 200) {
+                   this.onSkipPage('/')
+               } else {
+                   this.$message.error(data.msg)
+               }
+           })
+
+       }
+   },
+      // 上传之前
+      beforeUploadHandle1 () {
+          this.category.userId = this.$cookie.get('userId');
+          this.category.username = this.$cookie.get('username')
+      },
+      handleAvatarSuccessA (response, file) {
+        console.log(URL.createObjectURL(file.raw))
+          if (response && response.code == 200) {
+            this.dataForm.headPortrait = response.data.filePath
+              this.imageUrl = response.data.realPath
+          } else {
+              this.$message.error(response.msg)
+          }
+
+      },
   },
   components: {
     HeaderNav,
@@ -328,6 +365,9 @@ export default {
               .input-440
                 flex: none
                 width: 440px
+              .input-140
+               flex: none
+               width: 140px
               .date-box
                 width: 240px
                 height: 38px

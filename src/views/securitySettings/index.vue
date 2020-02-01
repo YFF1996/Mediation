@@ -17,7 +17,7 @@
                 <div class="schedule-wrapper">
                   <div class="schedule"></div>
                 </div>
-                <p class="active">100分</p>
+                <p class="active">{{sum}}分</p>
               </div>
               <div class="status">完成全部绑定，提升账号安全</div>
             </li>
@@ -29,7 +29,8 @@
                 <h3>身份认证</h3>
                 <p>提升账户安全级别和信任级别，认证后将无法修改认证信息</p>
               </div>
-              <div class="status">身份证号认证</div>
+              <div class="status" v-if="status == 1">身份证号已经认证</div>
+              <div class="status status-active"  v-if="status != 1" @click="pushNext">去认证</div>
             </li>
             <li>
               <div class="icon">
@@ -39,7 +40,7 @@
                 <h3>登入密码</h3>
                 <p>密码设置包含数字和字母，长度应为8位以上，安全性高的密码更能保护账户的安全</p>
               </div>
-              <div class="status status-active">修改</div>
+              <div class="status status-active" @click="show">修改</div>
             </li>
             <li>
               <div class="icon">
@@ -59,7 +60,7 @@
                 <h3>绑定邮箱</h3>
                 <p>绑定邮箱，可以提高安全性和信息的通知</p>
               </div>
-              <div class="status status-active">设置</div>
+              <div class="status status-active" @click="show1">设置</div>
             </li>
             <li>
               <div class="icon">
@@ -69,7 +70,7 @@
                 <h3>预留签名</h3>
                 <p>设置预留签名，可在案件文书签字过程直接使用预留签名</p>
               </div>
-              <div class="status status-active">设置</div>
+              <div class="status status-active" @click="show2">设置</div>
             </li>
           </ul>
         </div>
@@ -85,19 +86,19 @@
           <div class="item">
             <h4>登录密码</h4>
             <div class="input-box">
-              <input type="password" placeholder="请输入登录密码" />
+              <input type="password" v-model="password"  placeholder="请输入登录密码" />
             </div>
           </div>
           <div class="item">
             <h4>新手机号码</h4>
             <div class="input-box">
-              <input type="number" placeholder="请输入新的手机号码" />
+              <input type="number" v-model="phone" placeholder="请输入新的手机号码" />
             </div>
           </div>
           <div class="item">
             <h4>验证码</h4>
             <div class="input-box">
-              <input type="number" placeholder="请输入验证码" />
+              <input type="number" v-model="code" placeholder="请输入验证码" />
               <div class="get-code-btn" @click="onGetCodeFn()" v-if="second === 60">{{ codeText }}</div>
               <div class="get-code-btn" v-else>{{ second }}s</div>
             </div>
@@ -108,6 +109,44 @@
         </div>
       </div>
     </div>
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+      <el-form >
+        <el-form-item  label="原始密码：" prop="password">
+          <el-input style="width: 220px" v-model="password" type="text"></el-input>
+        </el-form-item>
+        <el-form-item  label="新密码：" prop="newPassword">
+          <el-input style="width: 220px" v-model="newPassword" type="text"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sumbitPwd()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="修改邮箱" :visible.sync="dialogFormVisible1">
+      <el-form >
+        <el-form-item  label="邮箱：" prop="emails">
+          <el-input style="width: 220px" v-model="emails" type="text"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+        <el-button type="primary" @click="sumbitEmail()">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="修改签名" :visible.sync="dialogFormVisible2">
+      <el-form >
+        <el-form-item  label="签名：" prop="signs">
+          <el-input style="width: 220px" v-model="signs" type="text"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="sumbitSign()">确 定</el-button>
+      </div>
+    </el-dialog>
     <footer-tempate :footerState="true" />
   </div>
 </template>
@@ -117,20 +156,175 @@ import HeaderNav from '@/components/headerNavTemplate'
 import TitleBox from '@/components/titleBoxTemplate'
 import MyNav from '@/components/myNavTemplate'
 import FooterTempate from '@/components/footerTemplate'
-
 let stop = null
 
 export default {
   data() {
     return {
+        phone:'',
+        sum: 0,
+        currentIndex:1,
+        newPassword:'',
+        password:'',
+        emails:'',
+        signs:'',
+        dialogFormVisible:false,
+        dialogFormVisible1:false,
+        dialogFormVisible2:false,
+        code:'',
       popUpsState: false,
       second: 60,
       codeText: '发送验证码'
     }
   },
+    computed: {
+        sign: {
+            get() {
+                return window.sessionStorage.getItem('sign')
+            }
+        },
+        email: {
+            get() {
+                return window.sessionStorage.getItem('email')
+            }
+        },
+        status: {
+            get() {
+                return window.sessionStorage.getItem('status')
+            }
+        },
+    },
+    created(){
+     if (window.sessionStorage.getItem('status') == 1){
+         this.sum =80;
+     }
+        if (window.sessionStorage.getItem('status') != 1){
+            this.sum =60;
+        }
+        if ( window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('sign') != null ){
+            this.sum =90;
+        }
+        if ( window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('email') != null ){
+            this.sum =90;
+        }
+        if (window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('email') != null&&window.sessionStorage.getItem('sign') != null){
+            this.sum =100;
+        }
+    },
   methods: {
+      pushNext() {
+              this.$router.push({
+                  path:'/registered',
+                  query:{
+                      index:1
+                  }
+              })
+      },
+      show(){
+          this.dialogFormVisible =true
+      },
+      show1(){
+          this.dialogFormVisible1 =true
+      },
+      show2(){
+          this.dialogFormVisible2 =true
+      },
+      sumbitPwd(){
+          let userId = this.$cookie.get("userId");
+          if (userId == null) {
+              this.$message.error("登录超时，请重新登录");
+              return;
+          } else {
+              this.$http({
+                  url: this.$http.adornUrl('/api/user/update/pwd'),
+                  method: 'post',
+                  params: this.$http.adornParams({
+                      'userId': this.$cookie.get("userId"),
+                      'password': this.password,
+                      'newPassword': this.newPassword,
+                  })
+              }).then(({data}) => {
+                  if (data && data.code == 200) {
+                      this.$message.success(data.msg);
+                  } else {
+                      this.$message.error(data.msg);
+                  }
+                  this.dialogFormVisible = false
+              })
+          }
+      },
+      sumbitEmail(){
+          let userId = this.$cookie.get("userId");
+          if (userId == null) {
+              this.$message.error("登录超时，请重新登录");
+              return;
+          } else {
+              this.$http({
+                  url: this.$http.adornUrl('/api/user/update/email'),
+                  method: 'post',
+                  params: this.$http.adornParams({
+                      'userId': this.$cookie.get("userId"),
+                      'email': this.email,
+                  })
+              }).then(({data}) => {
+                  if (data && data.code == 200) {
+                      window.sessionStorage.setItem('email', this.email)
+                      this.$message.success(data.msg);
+                  } else {
+                      this.$message.error(data.msg);
+                  }
+                  this.dialogFormVisible1 = false
+              })
+          }
+      },
+
+      sumbitSign(){
+          let userId = this.$cookie.get("userId");
+          if (userId == null) {
+              this.$message.error("登录超时，请重新登录");
+              return;
+          } else {
+              this.$http({
+                  url: this.$http.adornUrl('/api/user/update/sign'),
+                  method: 'get',
+                  params: this.$http.adornParams({
+                      'userId': this.$cookie.get("userId"),
+                      'sign': this.sign,
+                  })
+              }).then(({data}) => {
+                  if (data && data.code == 200) {
+                      window.sessionStorage.setItem('sign', this.sign)
+                      this.$message.success(data.msg);
+                  } else {
+                      this.$message.error(data.msg);
+                  }
+                  this.dialogFormVisible2 = false
+              })
+          }
+      },
     onShowHideFn (state) {
       this.popUpsState = state
+        let userId = this.$cookie.get("userId");
+        if (userId == null) {
+            this.$message.error("登录超时，请重新登录");
+            return;
+        } else {
+            this.$http({
+                url: this.$http.adornUrl('/api/user/update/phone'),
+                method: 'get',
+                params: this.$http.adornParams({
+                    'userId': this.$cookie.get("userId"),
+                    'phone': this.phone,
+                    'code': this.code
+                })
+            }).then(({data}) => {
+                if (data && data.code == 200) {
+                    this.$message.success(data.msg);
+                } else {
+                    this.$message.error(data.msg);
+                }
+            })
+        }
     },
     onGetCodeFn () {
       stop = setInterval(() => {
@@ -140,14 +334,24 @@ export default {
           this.codeText = '重新获取'
           window.clearInterval(stop)
         }
-      }, 1000)
+      }, 1000),
+          this.$http({
+              url: this.$http.adornUrl('/api/sms/code'),
+              method: 'post',
+              data: this.$http.adornData({
+                  'mobile':this.dataForm.mobile,
+                  'smsmode':'1'
+              })
+          }).then(({data}) => {
+              console.log(data)
+          })
     }
   },
   components: {
-    HeaderNav,
-    TitleBox,
-    MyNav,
-    FooterTempate
+      HeaderNav,
+      TitleBox,
+      MyNav,
+      FooterTempate
   }
 }
 </script>

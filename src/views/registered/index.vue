@@ -41,6 +41,8 @@ export default {
   },
   created () {
     this.createScheduleFn()
+      var param = this.$route.query
+      this.createNextFn(param.index)
   },
   methods: {
     createScheduleFn () {

@@ -114,13 +114,13 @@
         </div>
         <div class="pagination-wrapper">
           <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 30, 40, 50]"
-                  :page-size="100"
-                  layout="total, prev, pager, next, sizes, jumper"
-                  :total="50">
+                  @size-change="sizeChangeHandle"
+                  @current-change="currentChangeHandle"
+                  :current-page="pageIndex"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pageSize"
+                  :total="totalPage"
+                  layout="total, sizes, prev, pager, next, jumper">
           </el-pagination>
         </div>
       </div>
@@ -140,6 +140,9 @@
             return {
                 currentIndex: 0,
                 dataListLoading: false,
+                pageIndex: 1,
+                pageSize: 10,
+                totalPage: 0,
                 navList: [
                     {
                         title: '全部案例'
@@ -162,7 +165,6 @@
         methods: {
             // 获取数据列表
             getDataList () {
-                alert("=="+this.currentIndex)
                 this.$http({
                     url: this.$http.adornUrl('/api/application/dispute/list'),
                     method: 'get',
@@ -191,12 +193,17 @@
             onSkipPageFn (val) {
                 this.$router.push({name:'myDisputeDetails', params:{id:val}});
             },
-            handleSizeChange (val) {
-                window.console.log(`每页 ${val} 条`)
+            // 每页数
+            sizeChangeHandle (val) {
+                this.pageSize = val
+                this.pageIndex = 1
+                this.getDataList()
             },
-            handleCurrentChange (val) {
-                window.console.log(`当前页: ${val}`)
-            }
+            // 当前页
+            currentChangeHandle (val) {
+                this.pageIndex = val
+                this.getDataList()
+            },
         },
         components: {
             HeaderNav,
