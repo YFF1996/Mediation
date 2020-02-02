@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     onNextFn () {
-      this.$emit('createNextChild')
+      this.$emit('createNextChild',3)
     }
   }
 }

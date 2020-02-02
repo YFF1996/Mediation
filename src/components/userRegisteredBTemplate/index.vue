@@ -81,7 +81,7 @@
       </ul>
     </div>
     <div class="submit-wrapper">
-      <div class="btn">确认认证</div>
+      <div class="btn" @click="onBackFn()">上一步</div>
       <div class="btn btn-active" @click="onNextFn()">确认认证</div>
     </div>
   </div>
@@ -101,6 +101,9 @@ export default {
     }
   },
   methods: {
+      onBackFn(){
+          this.$emit('createNextChild', 0)
+      },
     onNextFn () {
       if (this.imageUrlB.length>0&this.imageUrlC.length>0&&this.imageUrlA.length>0) {
         this.$emit('createNextChild', 2)
@@ -224,11 +227,12 @@ export default {
         font-size: 18px
         cursor: pointer
         border-radius: 4px
-        display: none
-        color: #bdbdbd
-        background-color: #ebebeb
+        display: inline-block
+        color: #fff
+        background-color: #d41a1d
       .btn-active
-        display: block
+        margin-left :50px
+        display: inline-block
         color: #fff
         background-color: #d41a1d
 </style>

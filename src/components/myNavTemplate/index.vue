@@ -10,7 +10,8 @@
         <router-link to="/security_settings">安全设置</router-link>
         <router-link to="/my_data">我的资料</router-link>
         <router-link to="/message_center">消息中心</router-link>
-        <router-link to="/my_mediate">我要调解</router-link>
+      <!--<router-link to="/my_mediate">我要调解</router-link>-->
+        <router-link to="/online_mediation">我要调解</router-link>
         <router-link to="/my_advisory">我要咨询</router-link>
       </li>
     </ul>

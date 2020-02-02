@@ -159,7 +159,6 @@ getDataList () {
         if (data && data.code == 200) {
             this.lists = data.data.list
             this.totalPage = data.data.totalCount
-            alert("=="+this.totalPage)
         } else {
             this.dataList = []
             this.totalPage = 0

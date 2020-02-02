@@ -126,7 +126,9 @@
     methods: {
       onNextFn () {
         let username = this.$cookie.get("username");
+        alert("=="+username)
         if (username == null) {
+            this.$emit('nextChild', 1)
           this.$message.error("请先登录")
           return
         }

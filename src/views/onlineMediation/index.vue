@@ -57,6 +57,7 @@ export default {
       ]
     },
     onNextFn (index) {
+        alert("=="+index)
       this.currentIndex = index
     }
   },

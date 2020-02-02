@@ -23,7 +23,8 @@
               <div class="btn-wrapper">
                 <div class="btn">
                   <img src="../../common/img/contribution-icon.png" />
-                  <p>申请调解</p>
+                  <router-link to="/online_mediation" v-if="realname != null"> <p>申请调解</p></router-link>
+                  <router-link to="/registered" v-if="realname == null"> <p>申请调解</p></router-link>
                 </div>
               </div>
             </div>
@@ -45,7 +46,8 @@
               <div class="btn-wrapper">
                 <div class="btn">
                   <img src="../../common/img/contribution-icon.png" />
-                  <p>申请调解</p>
+                    <router-link to="/online_mediation" v-if="realname != null"> <p>申请调解</p></router-link>
+                    <router-link to="/registered" v-if="realname == null"> <p>申请调解</p></router-link>
                 </div>
               </div>
             </div>
@@ -80,6 +82,13 @@ export default {
       currentPage: 1
     }
   },
+    computed: {
+        realname: {
+            get () {
+                return window.sessionStorage.getItem('realname')
+            }
+        },
+    },
   methods: {
     handleSizeChange (val) {
       window.console.log(`每页 ${val} 条`)

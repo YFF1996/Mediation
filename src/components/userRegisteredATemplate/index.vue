@@ -140,6 +140,7 @@ export default {
                 'mobile':this.dataForm.mobile,
                 'realname':this.dataForm.realname,
                 'password': this.dataForm.password,
+                'captchaKey':this.uuid,
                 'captcha':this.dataForm.captcha,
             })
         }).then(({data}) => {
@@ -158,7 +159,6 @@ export default {
               url: this.$http.adornUrl('/api/getCaptcha'),
               method: 'get',
               data: this.$http.adornParams({
-
               })
           }).then(({data}) => {
               if (data && data.code == 200) {

@@ -53,6 +53,9 @@ export function treeDataTranslate (data, id = 'id', pid = 'parentId') {
  */
 export function clearLoginInfo () {
   Vue.cookie.delete('token')
+    Vue.cookie.delete('userId')
+    Vue.cookie.delete('username')
+    Vue.cookie.delete('realname')
   store.commit('resetStore')
   router.options.isAddDynamicMenuRoutes = false
 }

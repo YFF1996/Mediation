@@ -59,9 +59,9 @@ export default {
       ]
     },
     createNextFn (index) {
-      if (index) {
+      if (index ==0||index==1||index ==2) {
         this.currentIndex = index
-      } else {
+      } else if (index==3) {
         this.$router.push('/login')
       }
     }

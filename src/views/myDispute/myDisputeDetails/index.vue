@@ -33,11 +33,11 @@
                     <h3>{{dataForm.createTime}}</h3>
                     <div class="status">
                       <img src="../../../common/img/green-complete-icon.png" />
-                      <span v-if="dataForm.status == 2">已确认</span>
+                      <span v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">已确认</span>
                     </div>
                   </div>
                   <div class="text">
-                    <p v-if="dataForm.status == 2">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
+                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
                     <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
@@ -52,7 +52,7 @@
                     <h3>{{dataForm.createTime1}}</h3>
                   </div>
                   <div class="text">
-                    <p v-if="dataForm.status == 2">调解员{{dataForm.mediateName}}已确认受理。</p>
+                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">调解员{{dataForm.mediateName}}已确认受理。</p>
                     <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
                   </div>
                 </div>
@@ -135,13 +135,13 @@
         </div>
         <div class="pagination-wrapper">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40, 50]"
-            :page-size="100"
-            layout="total, prev, pager, next, sizes, jumper"
-            :total="50">
+                  @size-change="sizeChangeHandle"
+                  @current-change="currentChangeHandle"
+                  :current-page="pageIndex"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pageSize"
+                  :total="totalPage"
+                  layout="total, sizes, prev, pager, next, jumper">
           </el-pagination>
         </div>
       </div>
@@ -184,7 +184,9 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
-      currentIndex: 0,
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
         dataList:[],
         dataListLoading:false,
       navList: [
@@ -291,12 +293,17 @@ export default {
       this.currentIndex = index
         this.getUploadList(index+1);
     },
-    handleSizeChange (val) {
-      window.console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange (val) {
-      window.console.log(`当前页: ${val}`)
-    },
+      // 每页数
+      sizeChangeHandle (val) {
+          this.pageSize = val
+          this.pageIndex = 1
+          this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+          this.pageIndex = val
+          this.getDataList()
+      },
     onShowHideFn (state) {
       this.popUpsState = state
     }

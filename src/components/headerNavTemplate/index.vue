@@ -52,6 +52,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { clearLoginInfo } from '@/utils'
 
 export default {
   data () {
@@ -81,6 +82,11 @@ export default {
     },
     onReturnLoginFn (){
       window.localStorage.removeItem('setLsLoginState')
+        window.localStorage.removeItem('realname')
+        window.localStorage.removeItem('sign')
+        window.localStorage.removeItem('email')
+        window.localStorage.removeItem('status')
+        clearLoginInfo();
       this.setLsLoginState(false)
     }
   },

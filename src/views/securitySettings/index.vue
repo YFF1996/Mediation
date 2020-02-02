@@ -62,16 +62,16 @@
               </div>
               <div class="status status-active" @click="show1">设置</div>
             </li>
-            <li>
-              <div class="icon">
-                <img src="../../common/img/green-complete-icon.png" />
-              </div>
-              <div class="item">
-                <h3>预留签名</h3>
-                <p>设置预留签名，可在案件文书签字过程直接使用预留签名</p>
-              </div>
-              <div class="status status-active" @click="show2">设置</div>
-            </li>
+            <!--<li>-->
+              <!--<div class="icon">-->
+                <!--<img src="../../common/img/green-complete-icon.png" />-->
+              <!--</div>-->
+              <!--<div class="item">-->
+                <!--<h3>预留签名</h3>-->
+                <!--<p>设置预留签名，可在案件文书签字过程直接使用预留签名</p>-->
+              <!--</div>-->
+              <!--<div class="status status-active" @click="show2">设置</div>-->
+            <!--</li>-->
           </ul>
         </div>
       </div>
@@ -207,7 +207,7 @@ export default {
         if ( window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('email') != null ){
             this.sum =90;
         }
-        if (window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('email') != null&&window.sessionStorage.getItem('sign') != null){
+        if (window.sessionStorage.getItem('status') == 1 && window.sessionStorage.getItem('email') != null){
             this.sum =100;
         }
     },

@@ -93,7 +93,7 @@
       </li>
     </ul>
     <div class="submit-wrapper">
-      <div class="btn">下一步</div>
+      <div class="btn" @click="onBackFn()">上一步</div>
       <div class="btn btn-active" @click="onNextFn()">下一步</div>
     </div>
   </div>
@@ -124,6 +124,9 @@
       }
     },
     methods: {
+        onBackFn(){
+            this.$emit('nextChild', 0)
+        },
       onNextFn () {
         let username = this.$cookie.get("username");
         if (username == null) {
@@ -226,11 +229,12 @@
         font-size: 18px
         cursor: pointer
         border-radius: 4px
-        display: none
-        color: #bdbdbd
-        background-color: #ebebeb
+        display: inline-block
+        color: #fff
+        background-color: #d41a1d
       .btn-active
-        display: block
+        margin-left :50px
+        display: inline-block
         color: #fff
         background-color: #d41a1d
 </style>
