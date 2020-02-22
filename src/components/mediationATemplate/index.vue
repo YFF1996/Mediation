@@ -103,6 +103,7 @@
   export default {
     data() {
       return {
+          url:'',
         dataForm: {
           id: 0,
           type: '',
@@ -123,20 +124,60 @@
         value: ''
       }
     },
+      created(){
+        this.getDataList()
+      },
     methods: {
+        getDataList(){
+     var applicationId =  window.localStorage.getItem("applicationId")
+
+      var userId =  this.$cookie.get("userId");
+     if (userId == null){
+          this.$router.push("/login")
+         return
+     }
+
+      if (applicationId == null ||applicationId ==''){
+          return
+      }
+            this.$http({
+                url: this.$http.adornUrl('/api/application/find'),
+                method: 'post',
+                params: this.$http.adornParams({
+                    'userId':userId,
+                    'applicationId': applicationId,
+                })
+            }).then(({data}) => {
+                if (data && data.code == 200) {
+                    if(data.data != null) {
+                        this.dataForm = data.data
+                    }
+                } else {
+                    this.$message.error(data.msg)
+                }
+            })
+
+  },
       onNextFn () {
-        let username = this.$cookie.get("username");
-        alert("=="+username)
+
+        var username = this.$cookie.get("username");
+          var applicationId =  window.localStorage.getItem("applicationId")
         if (username == null) {
             this.$emit('nextChild', 1)
           this.$message.error("请先登录")
           return
         }
-
-        this.$http({
-          url: this.$http.adornUrl('/api/application/save'),
+          if (applicationId == null){
+              this.url=this.$http.adornUrl('/api/application/save');
+          } else  {
+              this.url=this.$http.adornUrl('/api/application/update');
+          }
+          this.$http({
+          url: this.url,
           method: 'post',
           data: this.$http.adornData({
+              'applicationId':applicationId,
+              'userId':this.$cookie.get("userId"),
             'name':this.dataForm.name,
             'type': this.dataForm.type,
             'cardName':this.value,
@@ -151,7 +192,6 @@
           if (data && data.code == 200) {
               window.localStorage.setItem("applicationId",data.data.applicationId)
             this.$emit('nextChild', 1)
-
           } else {
             this.$message.error(data.msg)
           }

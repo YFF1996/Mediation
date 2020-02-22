@@ -4,7 +4,7 @@
       <li
         v-for="(item, index) in lists"
         :key="index"
-        @click="onSkipPageFn()"
+        @click="onSkipPageFn('relatedCasesDetails',item.id)"
       >
         <h3>{{ item.content }}</h3>
         <div class="time-wrapper">
@@ -36,8 +36,9 @@ export default {
     }
   },
   methods: {
-    onSkipPageFn () {
-      this.$router.push('/related_cases_details')
+    onSkipPageFn (path,val) {
+        this.$router.push({name:path, params:{id:val}});
+
     },
       sizeChangeHandle (val) {
           window.console.log(`每页 ${val} 条`)

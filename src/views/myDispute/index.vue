@@ -32,7 +32,7 @@
           </div>
           <div class="btn" @click="getDataList()">查询</div>
         </div>
-        <div>
+        <div style="margin-top: 20px">
           <el-table
                   :data="dataList"
                   border
@@ -56,6 +56,7 @@
                     prop="detail"
                     header-align="center"
                     align="center"
+                    width="180"
                     label="纠纷概括">
             </el-table-column>
             <el-table-column
@@ -73,6 +74,18 @@
                 <span v-if="scope.row.type ==1">线上处理</span>
                 <span v-if="scope.row.type ==2">线下处理</span>
               </template>
+            </el-table-column>
+            <el-table-column
+                    prop="dealTime"
+                    header-align="center"
+                    align="center"
+                    label="调解时间">
+            </el-table-column>
+            <el-table-column
+                    prop="address"
+                    header-align="center"
+                    align="center"
+                    label="调解地点">
             </el-table-column>
             <el-table-column
                     prop="remark"
@@ -103,10 +116,11 @@
                     fixed="right"
                     header-align="center"
                     align="center"
-                    width="150"
+                    width="140"
                     label="操作">
               <template slot-scope="scope">
                 <el-button  type="text"  size="small" @click="onSkipPageFn(scope.row.id)">查看</el-button>
+                <el-button  type="text" v-if="scope.row.status ==2||scope.row.status ==3||scope.row.status ==4" size="small" @click="onSkipNextPage(scope.row.detailId,scope.row.detail,scope.row.sysUserId)">咨询</el-button>
                 <el-button type="text" size="small" v-if="scope.row.status ==4||scope.row.status ==1" @click="deleteHandle(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
@@ -143,6 +157,8 @@
                 pageIndex: 1,
                 pageSize: 10,
                 totalPage: 0,
+                startTime:'',
+                endTime:'',
                 navList: [
                     {
                         title: '全部案例'
@@ -165,16 +181,23 @@
         methods: {
             // 获取数据列表
             getDataList () {
+              if (this.dateValue != null){
+                this.startTime =this.dateValue[0]
+               this.endTime= this.dateValue[1]
+              } else {
+                this.endTime = null
+                this.startTime =null
+              }
                 this.$http({
                     url: this.$http.adornUrl('/api/application/dispute/list'),
                     method: 'get',
                     params: this.$http.adornParams({
                         'page': this.pageIndex,
                         'pagesize': this.pageSize,
-                        'startTime':this.dateValue[0],
-                        'endTime':this.dateValue[1],
+                        'startTime':this.startTime,
+                        'endTime':this.endTime,
                         'status':this.currentIndex,
-                      'username':this.$cookie.get("username")
+                      'userId':this.$cookie.get("userId")
                     })
                 }).then(({data}) => {
                     if (data && data.code == 200) {
@@ -204,6 +227,10 @@
                 this.pageIndex = val
                 this.getDataList()
             },
+          onSkipNextPage(val,content,sysUserId){
+            this.$router.push({name:'myAdvisory', params:{id:val,
+            content:content, sysUserId:sysUserId}});
+          }
         },
         components: {
             HeaderNav,

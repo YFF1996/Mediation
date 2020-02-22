@@ -3,26 +3,24 @@
     <header-nav :navState="false" />
     <title-box :path="'news_announcement'" />
     <div class="content">
-      <h1>《法制日报》新时代"发生地方就是发生的纠纷类似"，法定搜附近适得府君书两地分居</h1>
+      <h1>{{dataForm.title}}</h1>
       <div class="deta-wrapper">
-        <p>发布时间：2018-05-31</p>
-        <p>浏览次数：114</p>
+        <p>发布时间：{{dataForm.createTime}}</p>
+        <p>浏览次数：{{dataForm.num}}</p>
       </div>
       <div class="news-content">
-        <h2>一、互联网</h2>
-        <p>临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路</p>
-        <h2>二、发生的房间里</h2>
-        <p>水电费；开始的；福克斯 及时登录福建省砥砺奋进市领导机构来说的结论是及时登录福建省</p>
-        <img src="../../../common/img/news-img2.jpg" />
+        <p>{{dataForm.content}}</p>
+        <!--<img  src="../../../common/img/news-img2.jpg" />-->
+        <img  :src="dataForm.urlPic" />
       </div>
       <div class="paging-wrapper">
         <div class="paging-item">
           <p>上一篇：</p>
-          <p class="p">珍藏品，放松多了</p>
+          <p class="p">{{fontDataForm.title}}</p>
         </div>
         <div class="paging-item">
           <p>下一篇：</p>
-          <p class="p">水电费，放松多了</p>
+          <p class="p">{{nextDataForm.title}}</p>
         </div>
       </div>
     </div>
@@ -37,8 +35,69 @@ import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
-    return {}
+    return {
+        dataForm: {
+            paramValue: '',
+            num: '',
+            title: '',
+            content: '',
+            urlPic:'',
+            creator: '',
+            remark:'',
+            createTime: ''
+        },
+        fontDataForm: {
+            paramValue: '',
+            num: '',
+            title: '',
+            content: '',
+            urlPic:'',
+            creator: '',
+            remark:'',
+            createTime: ''
+        },
+        nextDataForm: {
+            paramValue: '',
+            num: '',
+            title: '',
+            content: '',
+            urlPic:'',
+            creator: '',
+            remark:'',
+            createTime: ''
+        },
+    }
   },
+    created () {
+        this.getDataList()
+    },
+    methods: {
+        getDataList() {
+            (this.$route.params)
+            this.$http({
+                url: this.$http.adornUrl('/api/news/one'),
+                method: 'get',
+                params: this.$http.adornParams({
+                    'id':  this.$route.params.id,
+                })
+            }).then(({data}) => {
+                if (data && data.code == 200) {
+                    if (data.data.current != null) {
+                        this.dataForm = data.data.current
+                    }
+                    if (data.data.font != null) {
+                        this.fontDataForm = data.data.font
+                    }
+                        if (data.data.next != null) {
+                            this.nextDataForm = data.data.next
+                        }
+                    console.log(this.dataForm)
+                    console.log(this.fontDataForm)
+                    console.log(this.nextDataForm)
+                }
+            })
+        }
+    },
   components: {
     HeaderNav,
     TitleBox,

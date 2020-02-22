@@ -15,7 +15,7 @@
         <router-link to="/related_cases">
           <li>相关案例</li>
         </router-link>
-        <router-link to="/online_mediation">
+        <router-link  to="/online_mediation">
           <li>在线调解</li>
         </router-link>
       </ul>
@@ -86,6 +86,8 @@ export default {
         window.localStorage.removeItem('sign')
         window.localStorage.removeItem('email')
         window.localStorage.removeItem('status')
+        window.localStorage.removeItem('applicationId')
+        window.localStorage.removeItem('respondentId')
         clearLoginInfo();
       this.setLsLoginState(false)
     }

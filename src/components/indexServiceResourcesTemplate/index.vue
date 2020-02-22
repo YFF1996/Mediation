@@ -7,27 +7,19 @@
           <h2>服务资源</h2>
           <img src="../../common/img/index-title-right.png" />
         </div>
-        <p>说明说明说明说明</p>
+        <p>说明</p>
       </div>
       <ul>
         <li>
-          <h3>5123</h3>
-          <p>咨询师</p>
-        </li>
-        <li>
-          <h3>577</h3>
-          <p>办案法官</p>
-        </li>
-        <li>
-          <h3>2390</h3>
+          <h3>{{mediateNum}}</h3>
           <p>调解员</p>
         </li>
         <li>
-          <h3>563</h3>
-          <p>仲裁机构</p>
+          <h3>{{contactNum}}</h3>
+          <p>联络员</p>
         </li>
         <li>
-          <h3>104</h3>
+          <h3>{{courtNum}}</h3>
           <p>法院</p>
         </li>
       </ul>
@@ -43,28 +35,48 @@ export default {
   data() {
     return {
       canvas: '',
+        contactNum:'',
+        mediateNum:'',
+        courtNum:'',
       ctx: '',
       canvasX: 0,
       canvasY: 0,
       radius: 150,
       lists: [
-        { title: '婚姻家庭', num: 15, color: '#8db8fe' },
-        { title: '物业纠纷', num: 40, color: '#559dff' },
-        { title: '劳动纠纷', num: 15, color: '#42decb' },
-        { title: '医疗纠纷', num: 5, color: '#45ea85' },
-        { title: '道路纠纷', num: 25, color: '#ffc572' }
+        { title: '婚姻家庭', num: 1, color: '#8db8fe' },
+        { title: '物业纠纷', num: 1, color: '#559dff' },
+        { title: '劳动纠纷', num: 1, color: '#42decb' },
+        { title: '医疗纠纷', num: 1, color: '#45ea85' },
+        { title: '道路纠纷', num: 1, color: '#ffc572' }
       ],
       outLine: 50
     }
   },
   mounted () {
-    this.canvas = document.getElementById('canvas')
-    this.ctx = this.canvas.getContext('2d')
-    this.canvasX = 300 + 25
-    this.canvasY = 300
-    this.writeCircle()
+      this.getDataList()
+
   },
   methods: {
+      getDataList () {
+          this.$http({
+              url: this.$http.adornUrl('/api/user/find/sum'),
+              method: 'get',
+              params: this.$http.adornParams({
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.contactNum = data.data.contactNum ;
+                  this.mediateNum =data.data.mediateNum ;
+                  this.courtNum = data.data.courtNum ;
+                  this.lists = data.data.count;
+                  this.canvas = document.getElementById('canvas')
+                  this.ctx = this.canvas.getContext('2d')
+                  this.canvasX = 280
+                  this.canvasY = 300
+                  this.writeCircle()
+              }
+          })
+      },
     // 绘制最外层细圈
     writeCircle () {
       // 1、将数据转为弧度
@@ -87,7 +99,7 @@ export default {
 
       // 变成圈图，中间加点东西
       this.ctx.beginPath()
-      this.ctx.arc(this.canvasX, this.canvasY, this.radius / 1.5, 0, Math.PI * 2, false)
+      this.ctx.arc(this.canvasX, this.canvasY, this.radius / 2, 0, Math.PI * 2, false)
       this.ctx.closePath()
       this.ctx.fillStyle = '#fff'
       this.ctx.fill()
@@ -198,7 +210,7 @@ export default {
             text-align: center
             color: #666
       .canvas-box
-        width: 400px
+        width: 500px
         height: auto
         margin: auto
 </style>

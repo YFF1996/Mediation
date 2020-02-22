@@ -3,15 +3,14 @@
     <header-nav :navState="false" />
     <title-box :path="'related_cases'" />
     <div class="content">
-      <h1>《法制日报》新时代"发生地方就是发生的纠纷类似"，法定搜附近适得府君书两地分居</h1>
+      <h1>{{dataForm.title}}</h1>
       <div class="deta-wrapper">
-        <p>发布时间：2018-05-31</p>
-        <p>浏览次数：114</p>
+        <p>发布时间：{{dataForm.createTime}}</p>
+        <p>浏览次数：{{dataForm.num}}</p>
       </div>
       <div class="news-content">
         <p>
-          临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,
-          临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路,临时登记法律上的解放路
+          {{dataForm.content}}
         </p>
       </div>
     </div>
@@ -26,8 +25,36 @@ import FooterTempate from '@/components/footerTemplate'
 
 export default {
   data() {
-    return {}
-  },
+    return {
+        dataForm: {
+            num: '',
+            title: '',
+            content: '',
+            remark:'',
+            createTime: ''
+        },
+
+    }  },
+    created () {
+        this.getDataList()
+    },
+    methods: {
+        getDataList() {
+            this.$http({
+                url: this.$http.adornUrl('/api/case/one'),
+                method: 'get',
+                params: this.$http.adornParams({
+                    'id':  this.$route.params.id,
+                })
+            }).then(({data}) => {
+                if (data && data.code == 200) {
+                    this.dataForm = data.data
+                    console.log(this.dataForm)
+
+                }
+            })
+        }
+    },
   components: {
     HeaderNav,
     TitleBox,

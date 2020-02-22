@@ -4,7 +4,7 @@
       <li>
         <div class="name">
           <p>*</p>
-          <h3>平台账号</h3>
+          <h3>真实姓名</h3>
         </div>
         <div class="input-box">
           <input type="text" v-model="dataForm.realname" placeholder="请输入账号" />
@@ -100,12 +100,14 @@ let stop = null
 export default {
   data() {
     return {
+        type:0,
         captchaPath: '',
         uuid: '',
       options: [{
         value: '身份证',
         label: '身份证'
       }],
+      userId:0,
         dataForm: {
             userName: '',
             realname: '',
@@ -124,31 +126,69 @@ export default {
   },
     mounted(){
         this.getCaptcha();
+        this.getDataList()
     },
   methods: {
+      getDataList(){
+        if (this.$cookie.get("username") == null || this.$cookie.get("username") == '') {
+          return;
+        }
+          this.$http({
+              url: this.$http.adornUrl('/api/user/find'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'username':this.$cookie.get("username")
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.dataForm = data.data
+              } else {
+                  this.$message.error(data.msg)
+              }
+          })
+
+      },
     onNextFn () {
+
+          if (!this.checked){
+              this.$message.error("请先同意,我已阅读并同意")
+              return;
+          }
       if (this.dataForm.password != this.dataForm.rePassword){
         this.$message.error("两次密码不一致")
         return;
       }
+        if (this.$cookie.get("username")) {
+            this.type =1
+          this.userId = this.$cookie.get("userId")
+        } else  {
+            this.type =0
+          this.userId =1
+        }
+
         this.$http({
             url: this.$http.adornUrl('/api/register'),
             method: 'post',
             data: this.$http.adornData({
+                'userId':this.userId,
                 'username':this.dataForm.username,
                 'smsCode': this.dataForm.smsCode,
                 'mobile':this.dataForm.mobile,
                 'realname':this.dataForm.realname,
                 'password': this.dataForm.password,
                 'captchaKey':this.uuid,
+                'type':this.type,
                 'captcha':this.dataForm.captcha,
             })
         }).then(({data}) => {
             if (data && data.code == 200) {
               this.$cookie.set("username",data.data.username);
+              this.$cookie.set("userId",data.data.userId);
                 this.$emit('createNextChild', 1)
 
             } else {
+              this.$cookie.delete("username");
+              this.$cookie.delete("userId");
               this.$message.error(data.msg)
             }
         })

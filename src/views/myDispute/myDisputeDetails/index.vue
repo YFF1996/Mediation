@@ -33,12 +33,13 @@
                     <h3>{{dataForm.createTime}}</h3>
                     <div class="status">
                       <img src="../../../common/img/green-complete-icon.png" />
+                      <span v-if="dataForm.status == 1">已提交纠纷，待审核</span>
                       <span v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">已确认</span>
                     </div>
                   </div>
                   <div class="text">
                     <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
-                    <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
+                    <div class="btn" @click="onShowHideFn(true,1)">查看</div>
                   </div>
                 </div>
               </li>
@@ -53,7 +54,7 @@
                   </div>
                   <div class="text">
                     <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">调解员{{dataForm.mediateName}}已确认受理。</p>
-                    <div class="btn" v-if="dataForm.status == 2" @click="onShowHideFn(true)">查看</div>
+                    <div class="btn" v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5" @click="onShowHideFn(true,2)">查看</div>
                   </div>
                 </div>
               </li>
@@ -68,6 +69,7 @@
                   </div>
                   <div class="text">
                     <p v-if="dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.mediateName}}已结案</p>
+                    <div class="btn" v-if="dataForm.status == 3||dataForm.status == 5" @click="onShowHideFn(true,3)">查看</div>
                   </div>
                 </div>
               </li>
@@ -89,11 +91,15 @@
           </ul>
         </div>
         <div class="table-wrapper">
+          <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+            <el-form-item>
+              <el-button @click="addOrUpdateHandle(0)">新增</el-button>
+            </el-form-item>
+          </el-form>
           <el-table
                   :data="dataList"
                   border
                   v-loading="dataListLoading"
-                  @selection-change="selectionChangeHandle"
                   style="width: 100%;">
             <el-table-column
                     type="selection"
@@ -163,7 +169,43 @@
           </div>
           <div class="item">
             <h4>附件：</h4>
-            <p>{{dataForm.path}}<el-button  type="text"  size="small" @click="click(dataForm.path)">下载</el-button></p>
+<!--            <p>{{dataForm.path}}<el-button  type="text"  size="small" @click="click(dataForm.path)">下载</el-button></p>-->
+            <el-table
+                    :data="pathList"
+                    border
+                    v-loading="dataListLoading1"
+                    style="width: 100%;">
+              <el-table-column
+                      type="selection"
+                      header-align="center"
+                      align="center"
+                      width="50">
+              </el-table-column>
+              <el-table-column
+                      type="index"
+                      header-align="center"
+                      align="center"
+                      prop="id"
+                      width="80"
+                      label="序号">
+              </el-table-column>
+              <el-table-column
+                      prop="title"
+                      header-align="center"
+                      align="center"
+                      label="名称">
+              </el-table-column>
+              <el-table-column
+                      fixed="right"
+                      header-align="center"
+                      align="center"
+                      width="150"
+                      label="操作">
+                <template slot-scope="scope">
+                  <el-button  type="text"  size="small" @click="click(scope.row.path)">下载</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
           <div class="btn-wrapper">
             <div class="btn" @click="onShowHideFn(false)">确定</div>
@@ -171,6 +213,8 @@
         </div>
       </div>
     </div>
+    <!-- 弹窗, 新增 / 修改 -->
+    <add-or-update v-if="addOrUpdateVisible"  ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <footer-tempate :footerState="true" />
   </div>
 </template>
@@ -180,7 +224,7 @@ import HeaderNav from '@/components/headerNavTemplate'
 import TitleBox from '@/components/titleBoxTemplate'
 import MyNav from '@/components/myNavTemplate'
 import FooterTempate from '@/components/footerTemplate'
-
+import AddOrUpdate from './add-or-update'
 export default {
   data() {
     return {
@@ -188,7 +232,10 @@ export default {
         pageSize: 10,
         totalPage: 0,
         dataList:[],
+        detailList:[],
+      pathList:[],
         dataListLoading:false,
+      dataListLoading1:false,
       navList: [
         {
           title: '证件列表'
@@ -214,11 +261,14 @@ export default {
             path:'',
             detail:'',
         },
+      addOrUpdateVisible: false,
       dateValue: '',
       currentPage: 1,
-      popUpsState: false
+      popUpsState: false,
+      currentIndex:0,
     }
   },
+
     created () {
         this.getDataList()
     },
@@ -227,44 +277,69 @@ export default {
           let m =val.lastIndexOf("/");
           let obj  = val.substring(m+1,val.length);
           this.$http({
-              url: this.$http.adornUrl('/sys/download'),
+              url: this.$http.adornUrl('/api/file/download'),
               method: 'get',
               params: this.$http.adornParams({
                   'url': val
               }),
               responseType: 'arraybuffer'
           }).then(({data}) => {
-              let blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'})
-              let objectUrl = URL.createObjectURL(blob)
-              let link = document.createElement('a')
-              link.href = objectUrl
-              link.download = obj
-
-              // 此写法兼容火狐浏览器
-              document.body.appendChild(link)
-
-              let evt = document.createEvent('MouseEvents')
-              evt.initEvent('click', false, false)
-              link.dispatchEvent(evt)
-
-              window.URL.revokeObjectURL(objectUrl)
+              // let blob = new Blob([data], {type: 'application/vnd.ms-excel;charset=UTF-8'})
+              // let objectUrl = URL.createObjectURL(blob)
+              // let link = document.createElement('a')
+              // link.href = objectUrl
+              // link.download = obj
+              //
+              // // 此写法兼容火狐浏览器
+              // document.body.appendChild(link)
+              //
+              // let evt = document.createEvent('MouseEvents')
+              // evt.initEvent('click', false, false)
+              // link.dispatchEvent(evt)
+              //
+              // window.URL.revokeObjectURL(objectUrl)
+            const csvData = new Blob([data], {type: 'application/x-xlsx'})//response.data要导出的内容
+            const file_name = obj;
+            // for IE
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+              window.navigator.msSaveOrOpenBlob(csvData, file_name);
+            }
+            // for Non-IE (chrome, firefox etc.)
+            else {
+              var a = document.createElement('a');
+              var url = window.URL.createObjectURL(csvData);
+              a.href =  url;
+              a.download = file_name;
+              a.click();
+              a.remove();
+              window.URL.revokeObjectURL(url);
+            }
               this.dataListLoading = false
           })
       },
+    // 新增 / 修改
+    addOrUpdateHandle () {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(this.dataForm.detailId,this.currentIndex)
+      })
+    },
       // 获取数据列表
       getDataList () {
+        if (this.$route.params.id) {
           this.$http({
-              url: this.$http.adornUrl('/api/application/dispute/one'),
-              method: 'get',
-              params: this.$http.adornParams({
-                  'id': this.$route.params.id,
-              })
+            url: this.$http.adornUrl('/api/application/dispute/detail'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'id': this.$route.params.id,
+            })
           }).then(({data}) => {
-              if (data && data.code == 200) {
-                  this.dataForm = data.data
-                  this.getUploadList(1)
-              }
+            if (data && data.code == 200) {
+              this.dataForm = data.data
+              this.getUploadList(1)
+            }
           })
+        }
       },
       // 获取数据列表
       getUploadList (val) {
@@ -304,12 +379,29 @@ export default {
           this.pageIndex = val
           this.getDataList()
       },
-    onShowHideFn (state) {
+    onShowHideFn (state,val) {
       this.popUpsState = state
+      if (state) {
+        this.dataListLoading = true
+        this.$http({
+          url: this.$http.adornUrl('/api/application/find/extra/one'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'disputeId': this.dataForm.detailId,
+            'type': val,
+          })
+        }).then(({data}) => {
+          if (data && data.code == 200) {
+            this.pathList = data.data.paths
+          }
+        })
+        this.dataListLoading = false
+      }
     }
   },
   components: {
     HeaderNav,
+    AddOrUpdate,
     TitleBox,
     MyNav,
     FooterTempate

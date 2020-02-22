@@ -22,7 +22,7 @@
             <div class="icon">
               <img src="../../common/img/account-icon.png" />
             </div>
-            <input type="text" v-model="accountVal" placeholder="请输入账号" />
+            <input type="text" v-model="accountVal" placeholder="请输入身份证号" />
           </div>
         </li>
         <li>
@@ -112,7 +112,7 @@ export default {
         url: this.$http.adornUrl('/api/login'),
         method: 'post',
         data: this.$http.adornData({
-          'realName': this.accountVal,
+          'username': this.accountVal,
           'password': this.passwordVal,
           'captcha': this.imgCodeVal,
             'captchaKey':this.uuid,

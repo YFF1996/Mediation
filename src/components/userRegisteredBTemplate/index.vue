@@ -4,17 +4,17 @@
       <ul>
         <li>
           <div class="title">
-            <h3>请上传身份证反面</h3>
+            <h3>请上传身份证正反面</h3>
             <p>*</p>
           </div>
           <div class="update-list">
             <div class="update-item">
-              <img v-if="imageUrlA" class="avatar-img" :src="imageUrlA" />
-              <div class="update-btn" v-else>
+              <img class="avatar-img" :src="imageUrlA" />
+              <div class="update-btn" >
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://192.168.1.101:8082/hc-online/api/upload/card"
+                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessA"
@@ -29,12 +29,12 @@
               </div>
             </div>
             <div class="update-item">
-              <img v-if="imageUrlB" class="avatar-img" :src="imageUrlB" />
-              <div class="update-btn" v-else>
+              <img  class="avatar-img" :src="imageUrlB" />
+              <div class="update-btn" >
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://192.168.1.101:8082/hc-online/api/upload/card"
+                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessB"
@@ -57,12 +57,12 @@
           </div>
           <div class="update-list">
             <div class="update-item">
-              <img v-if="imageUrlC" class="avatar-img" :src="imageUrlC" />
-              <div class="update-btn" v-else>
+              <img  class="avatar-img" :src="imageUrlC" />
+              <div class="update-btn">
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://192.168.1.101:8082/hc-online/api/upload/card"
+                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessC"
@@ -91,25 +91,44 @@
 export default {
   data() {
     return {
-      imageUrlA: '',
-      imageUrlB: '',
+      imageUrlA: "",
+      imageUrlB: "",
       category:{
         type:'',
         username:'',
       },
-      imageUrlC: ''
+      imageUrlC: ""
     }
   },
+    created(){
+        this.getDataList()
+    },
   methods: {
+      getDataList(){
+          this.$http({
+              url: this.$http.adornUrl('/api/file/idcard/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'username':this.$cookie.get("username"),
+              })
+          }).then(({data}) => {
+            console.log(data.data)
+              if (data && data.code == 200) {
+                  this.imageUrlA = data.data.revise
+                  this.imageUrlB = data.data.postive
+                  this.imageUrlC = data.data.hand
+              } else {
+                  this.$message.error(data.msg)
+              }
+          })
+
+      },
       onBackFn(){
           this.$emit('createNextChild', 0)
       },
     onNextFn () {
-      if (this.imageUrlB.length>0&this.imageUrlC.length>0&&this.imageUrlA.length>0) {
         this.$emit('createNextChild', 2)
-      } else {
-        this.$message.error("证件上传失败，请刷新界面重新上传")
-      }
+
     },
     // 上传之前
     beforeUploadHandle1 () {

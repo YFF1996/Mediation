@@ -5,7 +5,8 @@
       <p>你已成功注册!</p>
     </div>
     <div class="submit-wrapper">
-      <div class="btn" @click="onNextFn()">去登陆</div>
+      <div class="btn" @click="onBackFn()">上一步</div>
+      <div class="btn btn-active" @click="onNextFn()">去登陆</div>
     </div>
   </div>
 </template>
@@ -15,8 +16,14 @@ export default {
   data() {
     return {}
   },
+
   methods: {
+      onBackFn(){
+          this.$emit('createNextChild', 1)
+      },
     onNextFn () {
+      this.$cookie.delete("username");
+      this.$cookie.delete("userId");
       this.$emit('createNextChild',3)
     }
   }
@@ -58,6 +65,12 @@ export default {
         font-size: 18px
         cursor: pointer
         border-radius: 4px
+        display: inline-block
+        color: #fff
+        background-color: #d41a1d
+      .btn-active
+        margin-left :50px
+        display: inline-block
         color: #fff
         background-color: #d41a1d
 </style>

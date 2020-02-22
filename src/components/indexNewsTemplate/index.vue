@@ -7,69 +7,35 @@
           <h2>新闻公告</h2>
           <img src="../../common/img/index-title-right.png" />
         </div>
-        <p>说明说明说明说明</p>
+        <p>说明</p>
       </div>
       <div class="news-wrapper">
         <div class="banner-wrapper">
           <el-carousel
-            height="410px"
-            v-if="lists.length"
-            :initial-index="currendIndex"
-            @change="onChangeFn"
+                  height="410px"
+                  v-if="lists.length"
+                  :initial-index="currendIndex"
+                  @change="onChangeFn"
           >
             <el-carousel-item
-              v-for="(item, index) in lists"
-              :key="index"
+                    v-for="(item, index) in lists"
+                    :key="index"
             >
-              <img :src="item.urlPic" />
+
+              <img :src="item.path" />
+              <!--<h3 >{{item.name}}</h3>-->
             </el-carousel-item>
           </el-carousel>
-          <div class="mask-box">
-            <h3>亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会亚洲调解协会第四届国际调解研讨会啊啊啊啊</h3>
-            <div class="dot-box" v-if="lists.length">
-              <ul>
-                <li
-                  v-for="(item, index) in lists"
-                  :key="index"
-                  :class="{'active' : currendIndex === index}"
-                ></li>
-              </ul>
-            </div>
-          </div>
         </div>
         <div class="news-list-wrapper">
           <ul>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？公司的公司法是否水电费水电费</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
-            </li>
-            <li>
-              <h3>“人民法院调解平台APP”在哪下载？</h3>
-              <p>2019-11-05</p>
+            <li
+                    v-for="(item, index) in lists"
+                    :key="index"
+                    :class="{'active' : currendIndex === index}"
+            >
+              <h3>{{item.name}}</h3>
+              <p>{{item.createTime}}</p>
             </li>
           </ul>
         </div>
@@ -79,55 +45,55 @@
 </template>
 
 <script>
-import imgUrl1 from '@/common/img/news-bg1.jpg'
-import imgUrl2 from '@/common/img/news-bg2.jpeg'
-import imgUrl3 from '@/common/img/news-bg3.jpg'
+    // import imgUrl1 from '@/common/img/news-bg1.jpg'
+    // import imgUrl2 from '@/common/img/news-bg2.jpeg'
+    // import imgUrl3 from '@/common/img/news-bg3.jpg'
 
-export default {
-  data () {
-    return {
-      currendIndex: 0,
-      lists: [
-        {
-          urlPic: imgUrl1
+    export default {
+        data () {
+            return {
+
+                currendIndex: 0,
+                lists: [
+                    {
+                        name:'',
+                        createTime:'',
+                        path: '',
+                    },
+
+                ]
+            }
         },
-        {
-          urlPic: imgUrl2
+        created () {
+            this.getDataList()
         },
-        {
-          urlPic: imgUrl3
+        methods: {
+            onChangeFn(index) {
+                this.currendIndex = index
+            },
+            getDataList() {
+                this.$http({
+                    url: this.$http.adornUrl('/api/file/list'),
+                    method: 'get',
+                    params: this.$http.adornParams({
+                        'page': this.pageIndex,
+                        'pagesize': this.pageSize,
+                        'status':1
+                    })
+                }).then(({data}) => {
+
+                    if (data && data.code == 200) {
+                        this.lists = data.data.list
+                        this.totalPage = data.data.totalCount
+                        console.log( this.lists)
+                    } else {
+                        this.dataList = []
+                        this.totalPage = 0
+                    }
+                })
+            }
         }
-      ]
     }
-  },
-  created () {
-    this.getDataList()
-  },
-  methods: {
-    onChangeFn(index) {
-      this.currendIndex = index
-    },
-    getDataList() {
-      this.$http({
-        url: this.$http.adornUrl('/api/file/list'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'pagesize': this.pageSize,
-          'status':1
-        })
-      }).then(({data}) => {
-        if (data && data.code == 200) {
-          this.lists = data.data.list
-          this.totalPage = data.data.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
-        }
-      })
-    }
-  }
-}
 </script>
 
 <style lang="stylus" scoped>

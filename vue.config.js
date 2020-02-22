@@ -1,14 +1,14 @@
 module.exports = {
     runtimeCompiler: true,
-    publicPath: '/', // ÉèÖÃ´ò°üÎÄ¼þÏà¶ÔÂ·¾¶
+    publicPath: '/', // ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
     devServer: {
         // open: process.platform === 'darwin',
         // host: 'localhost',
         port: 8071,
-        // open: true, //ÅäÖÃ×Ô¶¯Æô¶¯ä¯ÀÀÆ÷
+        // open: true, //ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         proxy: {
             '/api': {
-                target: 'http://192.168.1.101:8082/hc-online', //¶ÔÓ¦×Ô¼ºµÄ½Ó¿Ú
+                target: 'http://39.99.172.44:8082/hc-online', //ï¿½ï¿½Ó¦ï¿½Ô¼ï¿½ï¿½Ä½Ó¿ï¿½
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {

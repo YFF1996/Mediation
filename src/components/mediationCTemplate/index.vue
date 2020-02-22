@@ -56,7 +56,7 @@
         <div class="update-wrapper">
           <el-upload
             drag
-            action="http://192.168.1.101:8082/hc-online/api/upload/card"
+            action="http://39.99.172.44:8082/hc-online/api/upload/card"
             multiple
             :on-success="handleAvatarSuccessA"
             :data="category"
@@ -69,7 +69,7 @@
       </li>
     </ul>
     <div class="submit-wrapper">
-      <div class="btn">提交申请</div>
+      <div class="btn" @click="onBackFn()">上一步</div>
       <div class="btn btn-active" @click="onNextFn()">提交申请</div>
     </div>
   </div>
@@ -109,6 +109,9 @@ export default {
         this.getCategory()
     },
   methods: {
+      onBackFn(){
+          this.$emit('nextChild', 1)
+      },
       getCategory(){
           this.$http({
               url: this.$http.adornUrl(`/sys/config/parent/list`),
@@ -166,6 +169,8 @@ export default {
                 })
             }).then(({data}) => {
                 if (data && data.code == 200) {
+                    window.localStorage.removeItem('applicationId')
+                    window.localStorage.removeItem('respondentId')
                     this.$router.push("/my_dispute")
                 } else {
                     this.$message.error(data.msg)
@@ -270,11 +275,12 @@ export default {
         font-size: 18px
         cursor: pointer
         border-radius: 4px
-        display: none
-        color: #bdbdbd
-        background-color: #ebebeb
+        display: inline-block
+        color: #fff
+        background-color: #d41a1d
       .btn-active
-        display: block
+        margin-left :50px
+        display: inline-block
         color: #fff
         background-color: #d41a1d
 </style>

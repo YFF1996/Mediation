@@ -7,14 +7,14 @@ import '@/common/js/axios.config.js'
 import '@/common/css/style.css'
 import '@/common/css/my_advisory.css'
 import store from './store'
-import httpRequest from '@/utils/httpRequest'  //ÒýÓÃÈ«¾Ö·â×°api½Ó¿ÚÇëÇó
+import httpRequest from '@/utils/httpRequest'  //ï¿½ï¿½ï¿½ï¿½È«ï¿½Ö·ï¿½×°apiï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½
 import VueCookies from 'vue-cookie'
 
 Vue.use(VueCookies)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$store = store
-Vue.prototype.$http= httpRequest//È«¾Ö×¢²áÇëÇó·½·¨
+Vue.prototype.$http= httpRequest//È«ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ó·½·ï¿½
 
 new Vue({
   router,

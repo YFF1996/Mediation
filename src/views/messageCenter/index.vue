@@ -33,47 +33,79 @@
             <input type="text">
             <div class="search-btn">搜索</div>
           </div>
-          <div class="del-wrapper">
-            <div class="btn">删除</div>
-          </div>
+          <!--<div class="del-wrapper">-->
+            <!--<div class="btn">删除</div>-->
+          <!--</div>-->
         </div>
         <div class="table-wrapper">
-          <div class="table-top">
-            <div class="item serial-number">排序</div>
-            <div class="item">消息标题</div>
-            <div class="item">发布者</div>
-            <div class="item">发布时间</div>
-          </div>
-          <ul>
-            <li @click="onShowHideFn(true)">
-              <div class="item serial-number">1</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">张某</div>
-              <div class="item">2019-12-12</div>
-            </li>
-            <li @click="onShowHideFn(true)">
-              <div class="item serial-number">2</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">黄某</div>
-              <div class="item">2019-12-12</div>
-            </li>
-            <li @click="onShowHideFn(true)">
-              <div class="item serial-number">3</div>
-              <div class="item">文字文字文字文字文字文字文字文字</div>
-              <div class="item">莫某</div>
-              <div class="item">2019-12-12</div>
-            </li>
-          </ul>
+          <el-table
+                  :data="dataList"
+                  border
+                  v-loading="dataListLoading"
+                  style="width: 100%;">
+            <el-table-column
+                    type="selection"
+                    header-align="center"
+                    align="center"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    header-align="center"
+                    align="center"
+                    prop="id"
+                    width="80"
+                    label="序号">
+            </el-table-column>
+            <el-table-column
+                    prop="title"
+                    header-align="center"
+                    align="center"
+                    label="消息标题">
+            </el-table-column>
+            <el-table-column
+                    prop="creator"
+                    header-align="center"
+                    align="center"
+                    label="发布者">
+            </el-table-column>
+            <el-table-column
+                    prop="createTime"
+                    header-align="center"
+                    align="center"
+                    width="180"
+                    label="发布时间">
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    header-align="center"
+                    align="center"
+                    width="150"
+                    label="操作">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="onShowHideFn(true,scope.row.id)">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+                  @size-change="sizeChangeHandle"
+                  @current-change="currentChangeHandle"
+                  :current-page="pageIndex"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pageSize"
+                  :total="totalPage"
+                  layout="total, sizes, prev, pager, next, jumper">
+          </el-pagination>
         </div>
         <div class="pagination-wrapper">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40, 50]"
-            :page-size="100"
-            layout="total, prev, pager, next, sizes, jumper"
-            :total="50">
+                  @size-change="sizeChangeHandle"
+                  @current-change="currentChangeHandle"
+                  :current-page="pageIndex"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pageSize"
+                  :total="totalPage"
+                  layout="total, sizes, prev, pager, next, jumper">
           </el-pagination>
         </div>
       </div>
@@ -82,21 +114,16 @@
       <div class="pop-ups">
         <div class="title">
           <h3>消息详情</h3>
-          <img @click="onShowHideFn(false)" src="../../common/img/closed-icon.png" />
+          <img @click="onShowHideFn(false,0)" src="../../common/img/closed-icon.png" />
         </div>
         <div class="content">
-          <h1>《法制日报》新时代"发生地方就是发生的纠纷类似"，法定搜附近</h1>
+          <h1>{{dataForm.title}}</h1>
           <div class="deta-wrapper">
-            <p>发布人：张某额</p>
-            <p>发布时间：2018-05-31 15:30</p>
+            <p>发布人：{{dataForm.creator}}</p>
+            <p>发布时间：{{dataForm.createTime}}</p>
           </div>
           <div class="text-box">
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
-            <p>青海省人力资源社会保障厅印发《青海省劳动人事争议调解员证书管理暂行规定》，将指导各地人社部门及各基层劳动人事争议调解组织加强对劳动人事争议调解员的聘用和管理工作，充分发挥基层劳动人事争议调解优势。</p>
+            <p>{{dataForm.content}}</p>
           </div>
         </div>
       </div>
@@ -114,42 +141,99 @@ import FooterTempate from '@/components/footerTemplate'
 export default {
   data() {
     return {
-      currentIndex: 0,
-      navList: [
-        {
-          title: '个人中心'
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
+        dataListLoading: false,
+        dataForm: {
+            paramValue: '',
+            title: '',
+            content: '',
+            creator: '',
+            remark:'',
+            createTime: ''
         },
+        currentIndex:0,
+      navList: [
+        // {
+        //   title: '个人中心'
+        // },
         {
           title: '消息通知'
         }
       ],
-      currentPage: 1,
       options: [
         {
-          value: '未读消息',
+          value: '1',
           label: '未读消息'
         },
         {
-          value: '已读消息',
+          value: '2',
           label: '已读消息'
         }
       ],
+        dataList: [],
       value: '',
       popUpsState: false
     }
   },
+    created () {
+        this.getDataList()
+    },
   methods: {
+      // 获取数据列表
+      getDataList () {
+          this.dataListLoading = true
+          this.$http({
+              url: this.$http.adornUrl('/api/message/list/find'),
+              method: 'get',
+              params: this.$http.adornParams({
+                  'page': this.pageIndex,
+                  'pagesize': this.pageSize,
+                  'key': this.dataForm.key,
+                  'status': this.value,
+                  'userId': this.$cookie.get("userId"),
+              })
+          }).then(({data}) => {
+              if (data && data.code == 200) {
+                  this.dataList = data.data.list
+                  this.totalPage = data.data.totalCount
+              } else {
+                  this.dataList = []
+                  this.totalPage = 0
+              }
+              this.dataListLoading = false
+          })
+      },
     onItemFn (index) {
       this.currentIndex = index
     },
-    handleSizeChange (val) {
-      window.console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange (val) {
-      window.console.log(`当前页: ${val}`)
-    },
-    onShowHideFn (state) {
-      this.popUpsState = state
+      // 每页数
+      sizeChangeHandle (val) {
+          this.pageSize = val
+          this.pageIndex = 1
+          this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle (val) {
+          this.pageIndex = val
+          this.getDataList()
+      },
+    onShowHideFn (state,val) {
+        this.$http({
+            url: this.$http.adornUrl('/api/message/find/one'),
+            method: 'get',
+            params: this.$http.adornParams({
+                'status': 1,
+                'id': val,
+            })
+        }).then(({data}) => {
+            if (data && data.code == 200) {
+                this.dataForm = data.data
+            }
+
+        })
+        this.popUpsState = state
     }
   },
   components: {

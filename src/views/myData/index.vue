@@ -14,7 +14,7 @@
                   <el-upload
                           class="avatar-uploader"
                           drag
-                          action="http://192.168.1.101:8082/hc-online/api/file/portrait/upload"
+                          action="http://39.99.172.44:8082/hc-online/api/file/portrait/upload"
                           :show-file-list="false"
                           :data="category"
                           :on-success="handleAvatarSuccessA"

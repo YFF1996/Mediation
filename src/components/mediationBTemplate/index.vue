@@ -123,7 +123,36 @@
         value: ''
       }
     },
+      created(){
+          this.getDataList()
+      },
     methods: {
+        getDataList(){
+            let applicationId =  window.localStorage.getItem("respondentId")
+            let userId =  this.$cookie.get("userId");
+            if (userId == null){
+                this.$message.error("请先登录")
+                return
+            }
+            if (applicationId == null){
+                return
+            }
+            this.$http({
+                url: this.$http.adornUrl('/api/application/save'),
+                method: 'post',
+                data: this.$http.adornData({
+                    'userId':userId,
+                    'applicationId': applicationId,
+                })
+            }).then(({data}) => {
+                if (data && data.code == 200) {
+                    this.dataForm = data.data
+                } else {
+                    this.$message.error(data.msg)
+                }
+            })
+
+        },
         onBackFn(){
             this.$emit('nextChild', 0)
         },
@@ -138,6 +167,7 @@
           method: 'post',
           data: this.$http.adornData({
             'name':this.dataForm.name,
+            'userId':this.$cookie.get("userId"),
             'type': this.dataForm.type,
             'cardName':this.value,
             'cardNumber':this.dataForm.cardNumber,

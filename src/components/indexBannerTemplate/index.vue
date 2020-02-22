@@ -44,7 +44,7 @@
                 </div>
                 <div class="dispute-text">
                   <h3>{{success}}</h3>
-                  <h4>调解成功率</h4>
+                  <h4>调解成功数量</h4>
                 </div>
               </li>
             </ul>
@@ -84,11 +84,11 @@
                   })
               }).then(({data}) => {
                   if (data && data.code == 200) {
-                      this.qian = (data.data.done/1000)%10;
-                      this.bai = (data.data.done/100)%10;
-                      this.shi = (data.data.done/10)%10;
-                      this.ge = (data.data.done/1)%10;
-                      this.rate=data.data.rate *100;
+                      this.qian = parseInt((data.data.done%1000)/1000);
+                      this.bai = parseInt((data.data.done%100)/100);
+                      this.shi = parseInt((data.data.done%100)/10);
+                      this.ge = parseInt(data.data.done%10);
+                      this.rate=Math.round(data.data.rate *100);
                      this.success=data.data.success.length;
                   } else {
                       this.dataList = []

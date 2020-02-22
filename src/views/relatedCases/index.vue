@@ -54,58 +54,60 @@ export default {
         key:'',
       navLists: [
         {
-            paramValue: '全部',
-            paramId: '全部'
+            paramValue: '',
+            paramId: ''
         },
-        {
-            paramValue: '婚姻家庭',
-            paramId: '全部'
-        },
-        {
-            paramValue: '道路纠纷',
-            paramId: '全部'
-        },
-        {
-            paramValue: '物业纠纷',
-            paramId: '全部'
-        },
-        {
-            paramValue: '劳动纠纷',
-            paramId: '全部'
-        },
-        {
-            paramValue: '医疗纠纷',
-            paramId: '全部'
-        }
+        // {
+        //     paramValue: '婚姻家庭',
+        //     paramId: '全部'
+        // },
+        // {
+        //     paramValue: '道路纠纷',
+        //     paramId: '全部'
+        // },
+        // {
+        //     paramValue: '物业纠纷',
+        //     paramId: '全部'
+        // },
+        // {
+        //     paramValue: '劳动纠纷',
+        //     paramId: '全部'
+        // },
+        // {
+        //     paramValue: '医疗纠纷',
+        //     paramId: '全部'
+        // }
       ],
         totalPage:0,
         paramId:'',
+      startTime:'',
+      endTime:'',
       lists: [
         {
-            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
-          time: '2019-11-11',
-          mark: '婚姻家庭'
+            content: '',
+          time: '',
+          mark: ''
         },
-        {
-            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-            createTime: '2019-11-11',
-            paramsKey: '婚姻家庭'
-        },
-        {
-            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
-            createTime: '2019-11-11',
-            paramsKey: '婚姻家庭'
-        },
-        {
-          title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-            createTime: '2019-11-11',
-            paramsKey: '婚姻家庭'
-        },
-        {
-            content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
-            createTime: '2019-11-11',
-            paramsKey: '婚姻家庭'
-        }
+        // {
+        //     content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
+        //     createTime: '2019-11-11',
+        //     paramsKey: '婚姻家庭'
+        // },
+        // {
+        //     content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝',
+        //     createTime: '2019-11-11',
+        //     paramsKey: '婚姻家庭'
+        // },
+        // {
+        //   title: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
+        //     createTime: '2019-11-11',
+        //     paramsKey: '婚姻家庭'
+        // },
+        // {
+        //     content: '孔某与张某、三方受理纠纷聚少离多就分手了累计收到了粉丝孔某与张某',
+        //     createTime: '2019-11-11',
+        //     paramsKey: '婚姻家庭'
+        // }
       ]
     }
   },
@@ -132,7 +134,6 @@ export default {
               })
           }).then(({data}) => {
               if (data && data.code == 200) {
-                  console.log(data.data)
                   this.navLists = data.data
                   var obj = {
                       paramValue: '全部',
@@ -144,14 +145,21 @@ export default {
       },
 // 获取数据列表
 getDataList () {
+  if (this.dateValue != null){
+    this.startTime =this.dateValue[0]
+    this.endTime= this.dateValue[1]
+  } else {
+    this.endTime = null
+    this.startTime =null
+  }
     this.$http({
         url: this.$http.adornUrl('/api/case/list'),
         method: 'get',
         params: this.$http.adornParams({
             'page': this.pageIndex,
             'pagesize': this.pageSize,
-            'startTime':this.dateValue[0],
-            'endTime':this.dateValue[1],
+            'startTime':this.startTime,
+            'endTime':this.endTime,
             'paramId':this.paramId,
             'key':this.key
         })
