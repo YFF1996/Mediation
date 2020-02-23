@@ -14,7 +14,7 @@
                   <el-upload
                           class="avatar-uploader"
                           drag
-                          action="http://39.99.172.44:8082/hc-online/api/file/portrait/upload"
+                          action="http://10.196.85.115:8082/hc-online/api/file/portrait/upload"
                           :show-file-list="false"
                           :data="category"
                           :on-success="handleAvatarSuccessA"
@@ -46,7 +46,6 @@
               <el-radio-group v-model="dataForm.sex">
                 <el-radio :label="0">男</el-radio>
                 <el-radio :label="1">女</el-radio>
-                <el-radio :label="2">其他</el-radio>
               </el-radio-group>
             </div>
           </li>
@@ -78,7 +77,7 @@
           <li>
             <div class="name">
               <p>*</p>
-              <h3>现居地址</h3>
+              <h3>城市区域</h3>
             </div>
             <div class="input-box" style="float: left;">
               <div class="name" >
@@ -122,25 +121,25 @@
               <input class="input-440" v-model="dataForm.householdCity" type="text" />
             </div>
           </li>
-          <li>
-            <div class="name">
-              <p>*</p>
-              <h3>其他证件</h3>
-            </div>
-            <div class="input-box">
-              <div class="select-box">
-                <el-select v-model="value" clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </div>
-              <input class="input-240"  type="text" placeholder="请输入你的证件号">
-            </div>
-          </li>
+<!--          <li>-->
+<!--            <div class="name">-->
+<!--              <p>*</p>-->
+<!--              <h3>其他证件</h3>-->
+<!--            </div>-->
+<!--            <div class="input-box">-->
+<!--              <div class="select-box">-->
+<!--                <el-select v-model="value" clearable placeholder="请选择">-->
+<!--                  <el-option-->
+<!--                    v-for="item in options"-->
+<!--                    :key="item.value"-->
+<!--                    :label="item.label"-->
+<!--                    :value="item.value">-->
+<!--                  </el-option>-->
+<!--                </el-select>-->
+<!--              </div>-->
+<!--              <input class="input-240"  type="text" placeholder="请输入你的证件号">-->
+<!--            </div>-->
+<!--          </li>-->
         </ul>
         <div class="submit-wrapper">
           <div class="btn">保存</div>
@@ -194,7 +193,35 @@ export default {
       dateValue: ''
     }
   },
+  created(){
+    this.getDataList();
+  },
   methods: {
+    getDataList(){
+      let username = this.$cookie.get("username");
+      this.$http({
+        url: this.$http.adornUrl('/api/user/find'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'username': username,
+        })
+      }).then(({data}) => {
+             console.log(data)
+        if (data &&data.code == 200){
+        this.dataForm.realname = data.data.realname
+          this.dataForm.sex = data.data.sex
+          this.dataForm.birthday = data.data.birthday
+                 this.dataForm.provinces = data.data.provinces
+                 this.dataForm.householdCity = data.data.householdCity
+                 this.dataForm.city = data.data.city
+                   this.dataForm.area= data.data.area
+               this.dataForm.address = data.data.address
+          this.dataForm.username = data.data.idcardHand
+          this.imageUrl = data.data.headPortrait
+
+        }
+      })
+              },
    submit() {
        let userId = this.$cookie.get("userId");
        if (userId == null) {
@@ -206,7 +233,7 @@ export default {
                method: 'post',
                data: this.$http.adornData({
                    'realName': this.dataForm.accountVal,
-                   'headPortrait': this.dataForm.headPortrait,
+                   'headPortrait': this.imageUrl,
                    'sex': this.dataForm.sex,
                    'birthday': this.dataForm.birthday,
                    'provinces': this.dataForm.provinces,
@@ -218,8 +245,9 @@ export default {
                    'address': this.dataForm.address,
                })
            }).then(({data}) => {
+
                if (data && data.code == 200) {
-                   this.onSkipPage('/')
+                   this.$message.success(data.msg)
                } else {
                    this.$message.error(data.msg)
                }

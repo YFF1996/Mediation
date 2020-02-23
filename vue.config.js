@@ -8,7 +8,7 @@ module.exports = {
         // open: true, //�����Զ����������
         proxy: {
             '/api': {
-                target: 'http://39.99.172.44:8082/hc-online', //��Ӧ�Լ��Ľӿ�
+                target: 'http://10.196.85.115:8082/hc-online', //��Ӧ�Լ��Ľӿ�
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {

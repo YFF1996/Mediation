@@ -73,7 +73,6 @@ export default {
     },
     methods: {
         getDataList() {
-            (this.$route.params)
             this.$http({
                 url: this.$http.adornUrl('/api/news/one'),
                 method: 'get',

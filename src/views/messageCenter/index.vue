@@ -30,8 +30,8 @@
             </el-select>
           </div>
           <div class="search-box">
-            <input type="text">
-            <div class="search-btn">搜索</div>
+            <input v-model="dataForm.key" type="text">
+            <div class="search-btn" @click="getDataList">搜索</div>
           </div>
           <!--<div class="del-wrapper">-->
             <!--<div class="btn">删除</div>-->
@@ -75,6 +75,17 @@
                     align="center"
                     width="180"
                     label="发布时间">
+            </el-table-column>
+            <el-table-column
+                    prop="status"
+                    header-align="center"
+                    align="center"
+                    width="180"
+                    label="消息状态">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status ==2">已读</span>
+                <span v-if="scope.row.status ==1">未读</span>
+              </template>
             </el-table-column>
             <el-table-column
                     fixed="right"
@@ -196,6 +207,7 @@ export default {
               })
           }).then(({data}) => {
               if (data && data.code == 200) {
+                console.log(data)
                   this.dataList = data.data.list
                   this.totalPage = data.data.totalCount
               } else {

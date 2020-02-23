@@ -22,7 +22,7 @@
                     :key="index"
             >
 
-              <img :src="item.path" />
+              <img :src="item.urlPic" />
               <!--<h3 >{{item.name}}</h3>-->
             </el-carousel-item>
           </el-carousel>
@@ -32,9 +32,10 @@
             <li
                     v-for="(item, index) in lists"
                     :key="index"
+                    @click="onSkipPageFn('newsDetails',item.id)"
                     :class="{'active' : currendIndex === index}"
             >
-              <h3>{{item.name}}</h3>
+              <h3>{{item.title}}</h3>
               <p>{{item.createTime}}</p>
             </li>
           </ul>
@@ -68,30 +69,32 @@
             this.getDataList()
         },
         methods: {
+          onSkipPageFn(path,val){
+            this.$router.push({name:path, params:{id:val}});
+          },
             onChangeFn(index) {
                 this.currendIndex = index
             },
-            getDataList() {
-                this.$http({
-                    url: this.$http.adornUrl('/api/file/list'),
-                    method: 'get',
-                    params: this.$http.adornParams({
-                        'page': this.pageIndex,
-                        'pagesize': this.pageSize,
-                        'status':1
-                    })
-                }).then(({data}) => {
+          // 获取数据列表
+          getDataList () {
+            this.$http({
+              url: this.$http.adornUrl('/api/news/list'),
+              method: 'get',
+              params: this.$http.adornParams({
+                'page': this.pageIndex,
+                'pagesize': this.pageSize,
+              })
+            }).then(({data}) => {
+              if (data && data.code == 200) {
+                console.log(data)
+                this.lists = data.data.list
+                this.totalPage = data.data.totalCount
+              } else {
+                this.dataList = []
+              }
+            })
+          },
 
-                    if (data && data.code == 200) {
-                        this.lists = data.data.list
-                        this.totalPage = data.data.totalCount
-                        console.log( this.lists)
-                    } else {
-                        this.dataList = []
-                        this.totalPage = 0
-                    }
-                })
-            }
         }
     }
 </script>

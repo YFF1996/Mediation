@@ -33,13 +33,15 @@
                     <h3>{{dataForm.createTime}}</h3>
                     <div class="status">
                       <img src="../../../common/img/green-complete-icon.png" />
-                      <span v-if="dataForm.status == 1">已提交纠纷，待审核</span>
-                      <span v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">已确认</span>
+<!--                      <span >已提交纠纷，待审核</span>-->
+<!--                      <span >已确认</span>-->
                     </div>
                   </div>
                   <div class="text">
-                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>
-                    <div class="btn" @click="onShowHideFn(true,1)">查看</div>
+                    <p >当前用户已提交纠纷，待审核</p>
+<!--                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.contactName}}已确认受理，调解协议已生成，请确认。</p>-->
+
+                    <div class="btn" style="float: right" @click="onShowHideFn(true,1)">查看</div>
                   </div>
                 </div>
               </li>
@@ -53,7 +55,21 @@
                     <h3>{{dataForm.createTime1}}</h3>
                   </div>
                   <div class="text">
-                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">调解员{{dataForm.mediateName}}已确认受理。</p>
+                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.contactName}}已经于{{dataForm.updateTime}}已确认受理。</p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="schedule-left">
+                  <div class="dot"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="schedule-right">
+                  <div class="top">
+                    <h3>{{dataForm.createTime1}}</h3>
+                  </div>
+                  <div class="text">
+                    <p v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5">调解员{{dataForm.mediateName}}将于{{dataForm.dealTime}}已确认受理。</p>
                     <div class="btn" v-if="dataForm.status == 2||dataForm.status == 3||dataForm.status == 5" @click="onShowHideFn(true,2)">查看</div>
                   </div>
                 </div>
@@ -68,7 +84,7 @@
                     <h3>{{dataForm.createTime2}}</h3>
                   </div>
                   <div class="text">
-                    <p v-if="dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.mediateName}}已结案</p>
+                    <p v-if="dataForm.status == 3||dataForm.status == 5">联络员{{dataForm.mediateName}}于{{dataForm.endTime}}已结案</p>
                     <div class="btn" v-if="dataForm.status == 3||dataForm.status == 5" @click="onShowHideFn(true,3)">查看</div>
                   </div>
                 </div>
@@ -93,7 +109,7 @@
         <div class="table-wrapper">
           <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
             <el-form-item>
-              <el-button @click="addOrUpdateHandle(0)">新增</el-button>
+              <el-button v-if="isShow ==1" @click="addOrUpdateHandle(0)">新增</el-button>
             </el-form-item>
           </el-form>
           <el-table
@@ -135,6 +151,7 @@
                     label="操作">
               <template slot-scope="scope">
                 <el-button  type="text"  size="small" @click="click(scope.row.path)">下载</el-button>
+                <el-button v-if="isShow" type="text"  size="small" @click="deleteRow(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -203,6 +220,7 @@
                       label="操作">
                 <template slot-scope="scope">
                   <el-button  type="text"  size="small" @click="click(scope.row.path)">下载</el-button>
+                  <el-button v-if="dataForm.status == 1"  type="text"  size="small" @click="deleteRow(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -234,11 +252,12 @@ export default {
         dataList:[],
         detailList:[],
       pathList:[],
+      isShow:1,
         dataListLoading:false,
       dataListLoading1:false,
       navList: [
         {
-          title: '证件列表'
+          title: '证据列表'
         },
         {
           title: '调解笔录'
@@ -273,6 +292,36 @@ export default {
         this.getDataList()
     },
   methods: {
+
+    deleteRow(id){
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.id
+      })
+      this.$confirm(`确定进行删除操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http({
+          url: this.$http.adornUrl('/api/file/delete'),
+          method: 'post',
+          data: this.$http.adornData(ids, false)
+        }).then(({data}) => {
+          if (data && data.code == 200) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
+      }).catch(() => {})
+    },
       click(val){
           let m =val.lastIndexOf("/");
           let obj  = val.substring(m+1,val.length);
@@ -366,7 +415,11 @@ export default {
       },
     onItemFn (index) {
       this.currentIndex = index
-        this.getUploadList(index+1);
+      this.isShow = 0
+      if (index == 0){
+        this.isShow = 1
+      }
+      this.getUploadList(index+1);
     },
       // 每页数
       sizeChangeHandle (val) {

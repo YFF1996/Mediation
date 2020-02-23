@@ -14,7 +14,7 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessA"
@@ -34,7 +34,7 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessB"
@@ -62,7 +62,7 @@
                 <el-upload
                   class="avatar-uploader"
                   drag
-                  action="http://39.99.172.44:8082/hc-online/api/upload/card"
+                  action="http://10.196.85.115:8082/hc-online/api/upload/card"
                   :show-file-list="false"
                   :data="category"
                   :on-success="handleAvatarSuccessC"

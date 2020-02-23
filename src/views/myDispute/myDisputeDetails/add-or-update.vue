@@ -24,7 +24,7 @@
                     drag
                     ref="upload"
                     :file-list="fileList"
-                    action="http://39.99.172.44:8082/hc-online/api/file/upload"
+                    action="http://10.196.85.115:8082/hc-online/api/file/upload"
                     multiple
                     :data="category"
                     :on-success="handleAvatarSuccessA"
